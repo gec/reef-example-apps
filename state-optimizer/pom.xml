@@ -52,9 +52,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <repositories>
-        <repository>
+                    <repository>
             <id>totalgrid-release</id>
             <name>https://repo.totalgrid.org-releases</name>
             <url>https://repo.totalgrid.org/artifactory/totalgrid-release</url>
@@ -78,5 +77,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-    </repositories>
+         </repositories>
+
 </project>

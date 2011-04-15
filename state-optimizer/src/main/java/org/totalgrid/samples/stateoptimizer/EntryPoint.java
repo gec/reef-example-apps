@@ -17,7 +17,7 @@ public class EntryPoint {
     public static void main(String[] args) {
         BrokerConnectionInfo info = getConnectionInfo();
 
-        // configure the connection with list of services
+        // configure the connection with list of services and address
         IConnection connection = new Connection(info, ReefServicesList.getInstance(), 5000);
         try {
             connection.connect(5000);
@@ -40,13 +40,14 @@ public class EntryPoint {
             // Run until we are done
             manager.run();
         } catch (Exception e) {
-            System.out.println("Error connecting or logging in: " + e.getMessage() + ". check that Reef server is running");
+            System.out.println("Error connecting or logging in: " + e.getMessage() + ". check that Reef server is running.");
             e.printStackTrace();
         } finally {
             try {
                 connection.disconnect(5000);
             } catch (ServiceIOException e) {
-                // swallow any errors disconnecting
+                System.out.println("Error disconnecting: " + e.getMessage());
+                e.printStackTrace();
             }
             System.out.println("Disconnected from Reef");
         }
@@ -54,7 +55,8 @@ public class EntryPoint {
 
     /**
      * gets the ip of the reef server, defaults to 127.0.0.1 but can be override with java property
-     * -Dorg.totalgrid.reef.amqp.host=192.168.100.10
+     *  -Dorg.totalgrid.reef.amqp.host=192.168.100.10
+     * @return settings to connect to the broker
      */
     private static BrokerConnectionInfo getConnectionInfo() {
         String reef_ip = System.getProperty("org.totalgrid.reef.amqp.host");
