@@ -1,12 +1,14 @@
 package org.totalgrid.samples.stateoptimizer;
 
-import org.totalgrid.reef.api.ServiceIOException;
-import org.totalgrid.reef.api.javaclient.IConnection;
-import org.totalgrid.reef.api.javaclient.ISession;
+
 import org.totalgrid.reef.api.request.AllScadaService;
-import org.totalgrid.reef.api.request.impl.ReefScadaServiceImpl;
-import org.totalgrid.reef.messaging.BrokerConnectionInfo;
-import org.totalgrid.reef.messaging.javaclient.Connection;
+import org.totalgrid.reef.api.request.impl.AllScadaServicePooledWrapper;
+import org.totalgrid.reef.api.request.impl.AuthTokenServicePooledWrapper;
+import org.totalgrid.reef.japi.ServiceIOException;
+import org.totalgrid.reef.japi.client.AMQPConnectionSettings;
+import org.totalgrid.reef.japi.client.Connection;
+import org.totalgrid.reef.japi.client.SessionExecutionPool;
+import org.totalgrid.reef.messaging.javaclient.AMQPConnection;
 import org.totalgrid.reef.proto.ReefServicesList;
 
 /**
@@ -15,21 +17,18 @@ import org.totalgrid.reef.proto.ReefServicesList;
 public class EntryPoint {
 
     public static void main(String[] args) {
-        BrokerConnectionInfo info = getConnectionInfo();
+        AMQPConnectionSettings info = getConnectionInfo();
 
         // configure the connection with list of services and address
-        IConnection connection = new Connection(info, ReefServicesList.getInstance(), 5000);
+        Connection connection = new AMQPConnection(info, ReefServicesList.getInstance(), 5000);
         try {
             connection.connect(5000);
             System.out.println("Connected to Reef");
 
-            // get a session for the algorithm to use and create the all services wrapper
-            ISession session = connection.newSession();
-            AllScadaService services = new ReefScadaServiceImpl(session);
+            SessionExecutionPool pool = connection.newSessionPool();
+            String authToken = new AuthTokenServicePooledWrapper(pool).createNewAuthorizationToken("core", "core");
 
-            // get an AuthToken and attach it to parent
-            String token = services.createNewAuthorizationToken("core", "core");
-            session.getDefaultEnv().setAuthToken(token);
+            AllScadaService services = new AllScadaServicePooledWrapper(pool, authToken);
 
             // create the switching algorithm we will use
             IStateOptimizer algorithm = new CapacitorSwitchingAlgorithm();
@@ -58,7 +57,7 @@ public class EntryPoint {
      *  -Dorg.totalgrid.reef.amqp.host=192.168.100.10
      * @return settings to connect to the broker
      */
-    private static BrokerConnectionInfo getConnectionInfo() {
+    private static AMQPConnectionSettings getConnectionInfo() {
         String reef_ip = System.getProperty("org.totalgrid.reef.amqp.host");
         if (reef_ip == null) reef_ip = "127.0.0.1";
         String reef_port = System.getProperty("org.totalgrid.reef.amqp.port");
@@ -70,7 +69,7 @@ public class EntryPoint {
         String virtualHost = System.getProperty("org.totalgrid.reef.amqp.virtualHost");
         if (virtualHost == null) virtualHost = "test";
 
-        return new BrokerConnectionInfo(reef_ip, Integer.parseInt(reef_port), user, password, virtualHost);
+        return new AMQPConnectionSettings(reef_ip, Integer.parseInt(reef_port), user, password, virtualHost);
     }
 
 }

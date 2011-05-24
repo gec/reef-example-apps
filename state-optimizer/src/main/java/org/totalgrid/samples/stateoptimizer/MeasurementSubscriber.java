@@ -1,12 +1,12 @@
 package org.totalgrid.samples.stateoptimizer;
 
-import org.totalgrid.reef.api.ISubscription;
-import org.totalgrid.reef.api.ReefServiceException;
-import org.totalgrid.reef.api.ServiceTypes;
-import org.totalgrid.reef.api.javaclient.IEventAcceptor;
+import org.totalgrid.reef.japi.ReefServiceException;
 import org.totalgrid.reef.api.request.AllScadaService;
-import org.totalgrid.reef.proto.Measurements;
-import org.totalgrid.reef.proto.Model;
+import org.totalgrid.reef.japi.client.SubscriptionEvent;
+import org.totalgrid.reef.japi.client.SubscriptionEventAcceptor;
+import org.totalgrid.reef.japi.client.SubscriptionResult;
+import org.totalgrid.reef.proto.Measurements.Measurement;
+import org.totalgrid.reef.proto.Model.Point;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,34 +15,33 @@ import java.util.Map;
 /**
  * subscribes to all measurements in the system, keeps last value of each measurement
  */
-public class MeasurementSubscriber implements IEventAcceptor<Measurements.Measurement> {
+public class MeasurementSubscriber implements SubscriptionEventAcceptor<Measurement> {
 
-    private Map<String, Measurements.Measurement> measurementState = new HashMap<String, Measurements.Measurement>();
+    private Map<String, Measurement> measurementState = new HashMap<String, Measurement>();
 
     public MeasurementSubscriber(AllScadaService services) throws ReefServiceException {
 
-        ISubscription<Measurements.Measurement> sub = services.createMeasurementSubscription(this);
-
         // get list of all points in system
-        List<Model.Point> points = services.getAllPoints();
-        // TODO: fliter points to only ones we plan on looking at
+        List<Point> points = services.getAllPoints();
+        // TODO: filter points to only ones we plan on looking at
 
-        List<Measurements.Measurement> integrityPoll = services.getMeasurementsByPoints(points, sub);
+        SubscriptionResult<List<Measurement>, Measurement> result = services.subscribeToMeasurementsByPoints(points);
 
-        for (Measurements.Measurement m : integrityPoll) {
+        for (Measurement m : result.getResult()) {
             updateMeasurement(m);
         }
+        result.getSubscription().start(this);
     }
 
     @Override
-    public void onEvent(ServiceTypes.Event<Measurements.Measurement> event) {
+    public void onEvent(SubscriptionEvent<Measurement> event) {
         // subscription updates come in from another thread here
         synchronized (this) {
-            updateMeasurement(event.getResult());
+            updateMeasurement(event.getValue());
         }
     }
 
-    private void updateMeasurement(Measurements.Measurement updatedMeasurement) {
+    private void updateMeasurement(Measurement updatedMeasurement) {
         // replace the current value with the most recently received measurement
         measurementState.put(updatedMeasurement.getName(), updatedMeasurement);
     }
@@ -50,9 +49,9 @@ public class MeasurementSubscriber implements IEventAcceptor<Measurements.Measur
     /**
      * @return copy of the measurement state
      */
-    public Map<String, Measurements.Measurement> getCurrentState() {
+    public Map<String, Measurement> getCurrentState() {
         synchronized (this) {
-            return new HashMap<String, Measurements.Measurement>(measurementState);
+            return new HashMap<String, Measurement>(measurementState);
         }
     }
 }
