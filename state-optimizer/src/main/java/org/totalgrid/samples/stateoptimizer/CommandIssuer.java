@@ -2,7 +2,7 @@ package org.totalgrid.samples.stateoptimizer;
 
 import org.totalgrid.reef.japi.ExpectationException;
 import org.totalgrid.reef.japi.ReefServiceException;
-import org.totalgrid.reef.api.request.CommandService;
+import org.totalgrid.reef.japi.request.CommandService;
 import org.totalgrid.reef.proto.Commands;
 import org.totalgrid.reef.proto.Model;
 

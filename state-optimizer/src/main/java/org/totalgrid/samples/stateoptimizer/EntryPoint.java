@@ -1,9 +1,9 @@
 package org.totalgrid.samples.stateoptimizer;
 
 
-import org.totalgrid.reef.api.request.AllScadaService;
-import org.totalgrid.reef.api.request.impl.AllScadaServicePooledWrapper;
-import org.totalgrid.reef.api.request.impl.AuthTokenServicePooledWrapper;
+import org.totalgrid.reef.japi.request.AllScadaService;
+import org.totalgrid.reef.japi.request.impl.AllScadaServicePooledWrapper;
+import org.totalgrid.reef.japi.request.impl.AuthTokenServicePooledWrapper;
 import org.totalgrid.reef.japi.ServiceIOException;
 import org.totalgrid.reef.japi.client.AMQPConnectionSettings;
 import org.totalgrid.reef.japi.client.Connection;
