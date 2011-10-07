@@ -4,7 +4,7 @@
     <artifactId>state-optimizer</artifactId>
     <groupId>org.totalgrid</groupId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
 
     <build>
         <plugins>
@@ -24,19 +24,19 @@
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-amqp</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-proto</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-api-request</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
