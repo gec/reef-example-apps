@@ -4,7 +4,7 @@
     <artifactId>state-optimizer</artifactId>
     <groupId>org.totalgrid</groupId>
     <packaging>jar</packaging>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
 
     <build>
         <plugins>
@@ -23,34 +23,10 @@
     <dependencies>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
-            <artifactId>reef-amqp</artifactId>
-            <version>0.3.1</version>
-            <scope>compile</scope>
+            <artifactId>reef-client</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.totalgrid.reef</groupId>
-            <artifactId>reef-proto</artifactId>
-            <version>0.3.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.totalgrid.reef</groupId>
-            <artifactId>reef-api-request</artifactId>
-            <version>0.3.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.5</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.6.1</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
     <repositories>
         <repository>
@@ -61,6 +37,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <!--
         <repository>
             <id>third-party-release</id>
             <name>https://repo.totalgrid.org-third-party</name>
@@ -69,6 +46,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        -->
         <repository>
             <id>totalgrid-snapshot</id>
             <name>https://repo.totalgrid.org-snapshot</name>

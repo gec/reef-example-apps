@@ -1,10 +1,11 @@
 package org.totalgrid.samples.stateoptimizer;
 
-import org.totalgrid.reef.japi.ReefServiceException;
-import org.totalgrid.reef.japi.request.AllScadaService;
-import org.totalgrid.reef.japi.client.SubscriptionEvent;
-import org.totalgrid.reef.japi.client.SubscriptionEventAcceptor;
-import org.totalgrid.reef.japi.client.SubscriptionResult;
+
+import org.totalgrid.reef.api.japi.ReefServiceException;
+import org.totalgrid.reef.api.japi.client.SubscriptionEvent;
+import org.totalgrid.reef.api.japi.client.SubscriptionEventAcceptor;
+import org.totalgrid.reef.api.japi.client.SubscriptionResult;
+import org.totalgrid.reef.client.rpc.AllScadaService;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
 
