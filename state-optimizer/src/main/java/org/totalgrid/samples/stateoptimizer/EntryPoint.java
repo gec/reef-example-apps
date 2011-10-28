@@ -1,12 +1,12 @@
 package org.totalgrid.samples.stateoptimizer;
 
 
-import org.totalgrid.reef.api.japi.ReefServiceException;
-import org.totalgrid.reef.api.japi.client.Client;
-import org.totalgrid.reef.api.japi.client.Connection;
-import org.totalgrid.reef.api.japi.client.ConnectionFactory;
-import org.totalgrid.reef.api.japi.settings.AmqpSettings;
-import org.totalgrid.reef.api.japi.settings.UserSettings;
+import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
+import org.totalgrid.reef.clientapi.Client;
+import org.totalgrid.reef.clientapi.Connection;
+import org.totalgrid.reef.clientapi.ConnectionFactory;
+import org.totalgrid.reef.clientapi.settings.AmqpSettings;
+import org.totalgrid.reef.clientapi.settings.UserSettings;
 import org.totalgrid.reef.client.ReefConnectionFactory;
 import org.totalgrid.reef.client.rpc.AllScadaService;
 
