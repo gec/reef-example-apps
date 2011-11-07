@@ -1,4 +1,4 @@
-package org.totalgrid.samples.stateoptimizer;
+package org.totalgrid.reef.examples.stateoptimizer;
 
 
 import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
