@@ -19,13 +19,6 @@ import java.util.Properties;
  */
 public class EntryPoint {
 
-    private static AmqpSettings getConnectionSettings(String filePath) throws IOException {
-        FileInputStream stream = new FileInputStream(filePath);
-        Properties props = new Properties();
-        props.load(stream);
-        return new AmqpSettings(props);
-    }
-
     private static UserSettings getUserSettings(String filePath) throws IOException {
         FileInputStream stream = new FileInputStream(filePath);
         Properties props = new Properties();
@@ -62,7 +55,7 @@ public class EntryPoint {
     public static void main(String[] args) throws Exception {
 
         if (args.length == 2) {
-            AmqpSettings amqp = getConnectionSettings(args[0]);
+            AmqpSettings amqp = new AmqpSettings(args[0]);
             UserSettings user = getUserSettings(args[1]);
             startup(amqp, user);
 
