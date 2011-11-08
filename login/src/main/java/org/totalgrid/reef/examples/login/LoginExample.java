@@ -9,7 +9,7 @@ import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
 import org.totalgrid.reef.clientapi.settings.AmqpSettings;
 import org.totalgrid.reef.clientapi.settings.UserSettings;
 
-public class LoginConnector {
+public class LoginExample {
 
 
     public static void main(String[] args) throws Exception {
