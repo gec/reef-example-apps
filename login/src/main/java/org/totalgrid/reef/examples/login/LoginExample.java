@@ -1,6 +1,5 @@
 package org.totalgrid.reef.examples.login;
 
-
 import org.totalgrid.reef.client.ReefConnectionFactory;
 import org.totalgrid.reef.clientapi.Client;
 import org.totalgrid.reef.clientapi.Connection;

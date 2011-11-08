@@ -11,6 +11,7 @@
 	<modules>
 		<module>state-optimizer</module>
 		<module>login</module>
+		<module>points</module>
 	</modules>
 
 </project>
