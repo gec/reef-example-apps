@@ -19,12 +19,6 @@ import java.util.Properties;
  */
 public class EntryPoint {
 
-    private static UserSettings getUserSettings(String filePath) throws IOException {
-        FileInputStream stream = new FileInputStream(filePath);
-        Properties props = new Properties();
-        props.load(stream);
-        return new UserSettings(props);
-    }
 
     public static void startup(AmqpSettings amqp, UserSettings user) {
         ConnectionFactory factory = new ReefConnectionFactory(amqp);
@@ -56,7 +50,7 @@ public class EntryPoint {
 
         if (args.length == 2) {
             AmqpSettings amqp = new AmqpSettings(args[0]);
-            UserSettings user = getUserSettings(args[1]);
+            UserSettings user = new UserSettings(args[1]);
             startup(amqp, user);
 
         } else {
