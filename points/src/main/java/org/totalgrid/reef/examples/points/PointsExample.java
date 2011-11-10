@@ -40,6 +40,7 @@ public class PointsExample {
     }
 
     public static void getPointByUuid(Client client) throws ReefServiceException {
+
         PointService service = client.getRpcInterface(PointService.class);
 
         Point examplePoint = service.getAllPoints().get(0);
@@ -49,7 +50,6 @@ public class PointsExample {
         Point point = service.getPointByUid(uuid);
 
         System.out.println("Found point by UUID: " + point.getName() + ", " + point.getUuid());
-
     }
 
 

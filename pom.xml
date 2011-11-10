@@ -12,6 +12,14 @@
 		<module>state-optimizer</module>
 		<module>login</module>
 		<module>points</module>
+		<module>measurements</module>
+		<module>measurement-history</module>
+		<module>measurement-publishing</module>
+		<module>events</module>
+		<module>event-publishing</module>
+		<module>alarms</module>
+		<module>endpoints</module>
+		<module>configfile</module>
 	</modules>
 
 </project>
