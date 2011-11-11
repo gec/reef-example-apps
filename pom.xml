@@ -21,6 +21,7 @@
 		<module>alarms</module>
 		<module>endpoints</module>
 		<module>configfile</module>
+		<module>applications</module>
 	</modules>
 
 </project>
