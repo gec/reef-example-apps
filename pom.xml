@@ -15,6 +15,7 @@
 		<module>measurements</module>
 		<module>measurement-history</module>
 		<module>measurement-publishing</module>
+		<module>commands</module>
 		<module>events</module>
 		<module>event-publishing</module>
 		<module>alarms</module>

@@ -2,7 +2,6 @@ package org.totalgrid.reef.examples.events.publishing;
 
 import org.totalgrid.reef.client.ReefConnectionFactory;
 import org.totalgrid.reef.client.rpc.EventCreationService;
-import org.totalgrid.reef.client.rpc.EventService;
 import org.totalgrid.reef.clientapi.Client;
 import org.totalgrid.reef.clientapi.Connection;
 import org.totalgrid.reef.clientapi.ConnectionFactory;
@@ -10,7 +9,6 @@ import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
 import org.totalgrid.reef.clientapi.settings.AmqpSettings;
 import org.totalgrid.reef.clientapi.settings.UserSettings;
 import org.totalgrid.reef.proto.Events.Event;
-import org.totalgrid.reef.proto.Events.EventSelect;
 import org.totalgrid.reef.proto.Utils.Attribute;
 
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ public class EventPublishingExample {
     public static void publishEvent(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Publish Event ===\n\n");
-
-        EventService eventService = client.getRpcInterface(EventService.class);
 
         EventCreationService eventCreationService = client.getRpcInterface(EventCreationService.class);
 
@@ -51,8 +47,6 @@ public class EventPublishingExample {
     public static void publishEventWithArguments(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Publish Event With Arguments ===\n\n");
-
-        EventService eventService = client.getRpcInterface(EventService.class);
 
         EventCreationService eventCreationService = client.getRpcInterface(EventCreationService.class);
 
