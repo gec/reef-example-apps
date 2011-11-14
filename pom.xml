@@ -19,6 +19,7 @@
 		<module>events</module>
 		<module>event-publishing</module>
 		<module>alarms</module>
+		<module>entities</module>
 		<module>endpoints</module>
 		<module>configfile</module>
 		<module>applications</module>
