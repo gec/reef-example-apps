@@ -23,6 +23,7 @@
 		<module>endpoints</module>
 		<module>configfile</module>
 		<module>applications</module>
+		<module>subscriptions</module>
 	</modules>
 
 </project>
