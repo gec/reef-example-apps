@@ -14,21 +14,41 @@ import org.totalgrid.reef.proto.Events.Event;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *  Example: Alarms
+ *
+ *
+ */
 public class AlarmsExample {
 
-
+    /**
+     * Get Active Alarms
+     *
+     * Simple query for
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getActiveAlarms(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Active Alarms ===\n\n");
 
+        // Get service interface for alarms
         AlarmService alarmService = client.getRpcInterface(AlarmService.class);
 
-        List<Alarm> alarmList = alarmService.getActiveAlarms(5);
+        // Limit the number of objects returned to a manageable amount
+        int limit = 5;
 
+        // Call the alarm service to get a list of active alarms
+        List<Alarm> alarmList = alarmService.getActiveAlarms(limit);
+
+        // Inspect the first Alarm
         Alarm firstAlarm = alarmList.get(0);
 
+        // Alarms are associated with a single Event
         Event firstEvent = firstAlarm.getEvent();
 
+        // Display the properties of the Alarm and Event objects
         System.out.println("Alarm");
         System.out.println("-----------");
         System.out.println("Alarm Uid: " + firstAlarm.getUid());
@@ -44,27 +64,42 @@ public class AlarmsExample {
         System.out.println("Time: " + new Date(firstEvent.getTime()));
         System.out.println("-----------\n");
 
+        // List active Alarms
         for (Alarm alarm : alarmList) {
             System.out.println("Alarm: " + alarm.getState() + ", " + alarm.getEvent().getRendered() + ", " + new Date(alarm.getEvent().getTime()).toString());
         }
     }
 
+    /**
+     * Alarm Lifecycle
+     *
+     * Demonstrates the lifecycle of an alarm. Alarms begin in the state UNACK_AUDIBLE or UNACK_SILENT,
+     * are acknowledged by an operator and transition to the state ACKNOWLEDGED, and are removed to the
+     * state REMOVED when no longer relevant.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void alarmLifecycle(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Alarm Lifecycle ===\n\n");
 
+        // Get service interface for alarms
         AlarmService alarmService = client.getRpcInterface(AlarmService.class);
 
+        // Get the first active alarm
         Alarm alarm = alarmService.getActiveAlarms(1).get(0);
 
         System.out.println("Original: ");
         System.out.println("Alarm: " + alarm.getState() + ", " + alarm.getEvent().getRendered() + ", " + new Date(alarm.getEvent().getTime()).toString() + "\n");
 
+        // Acknowledges alarm, changing state from UNACK_* to ACKNOWLEDGED
         Alarm acked = alarmService.acknowledgeAlarm(alarm);
 
         System.out.println("Acknowledged: ");
         System.out.println("Alarm: " + acked.getState() + ", " + acked.getEvent().getRendered() + ", " + new Date(acked.getEvent().getTime()).toString() + "\n");
 
+        // Removes alarm, changing state from ACKNOWLEDGED to REMOVED
         Alarm removed = alarmService.removeAlarm(acked);
 
         System.out.println("Removed: ");

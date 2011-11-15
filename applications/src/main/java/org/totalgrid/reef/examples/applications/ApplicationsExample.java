@@ -12,18 +12,35 @@ import org.totalgrid.reef.proto.Application.ApplicationConfig;
 
 import java.util.List;
 
+/**
+ * Example: Applications
+ *
+ *
+ */
 public class ApplicationsExample {
 
+    /**
+     * Get Applications
+     *
+     * Retrieves a list of applications registered in the system.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getApplications(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Get Applications ===\n\n");
 
+        // Get service interface for applications
         ApplicationService applicationService = client.getRpcInterface(ApplicationService.class);
 
-        List<ApplicationConfig> applicationConfigList =  applicationService.getApplications();
+        // Get list of registered applications
+        List<ApplicationConfig> applicationConfigList = applicationService.getApplications();
 
+        // Inspect first ApplicationConfig object
         ApplicationConfig applicationConfig = applicationConfigList.get(0);
 
+        // Display properties of ApplicationConfig
         System.out.println("ApplicationConfig");
         System.out.println("-----------");
         System.out.println("Uuid: " + applicationConfig.getUuid().getUuid());
@@ -33,6 +50,7 @@ public class ApplicationsExample {
         System.out.println("Network: " + applicationConfig.getNetwork());
         System.out.println("-----------\n");
 
+        // Display list of ApplicationConfig objects
         for (ApplicationConfig appConfig : applicationConfigList) {
             System.out.println("Application: " + appConfig.getInstanceName());
         }
