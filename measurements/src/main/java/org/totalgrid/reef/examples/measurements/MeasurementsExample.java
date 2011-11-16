@@ -12,48 +12,99 @@ import org.totalgrid.reef.clientapi.settings.UserSettings;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
 
+import java.util.Date;
 import java.util.List;
 
+/**
+ * Example: Measurements
+ *
+ */
 public class MeasurementsExample {
 
-
+    /**
+     * Get Measurement by Point
+     *
+     * Finds latest measurement value for a specific point.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMeasurementByPoint(Client client) throws ReefServiceException {
 
+        System.out.print("\n=== Measurement By Point ===\n\n");
+
+        // Get service interface for points
         PointService pointService = client.getRpcInterface(PointService.class);
 
+        // Select a specific point
         Point examplePoint = pointService.getAllPoints().get(0);
 
+        // Get service interface for measurements
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Get latest measurement for the point
         Measurement measurement = measurementService.getMeasurementByPoint(examplePoint);
 
+        // Display measurement properties
         System.out.println("Found Measurement by Point: \n" + measurement);
     }
 
+    /**
+     * Get Measurement by Name
+     *
+     * Finds latest measurement value for a specific point, specified by name.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMeasurementByName(Client client) throws ReefServiceException {
 
+        System.out.print("\n=== Measurement By Name ===\n\n");
+
+        // Get service interface for points
         PointService pointService = client.getRpcInterface(PointService.class);
 
+        // Select a specific point, get its point name
         String pointName = pointService.getAllPoints().get(0).getName();
 
+        // Get service interface for measurements
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Get latest measurement for the point by name
         Measurement measurement = measurementService.getMeasurementByName(pointName);
 
+        // Display measurement properties
         System.out.println("Found Measurement by name: \n" + measurement);
     }
 
+    /**
+     * Get Multiple Measurements
+     *
+     * Finds latest measurement value for multiple points.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMultipleMeasurements(Client client) throws ReefServiceException {
 
+        System.out.print("\n=== Multiple Measurements ===\n\n");
+
+        // Get service interface for points
         PointService pointService = client.getRpcInterface(PointService.class);
 
-        List<Point> pointList = pointService.getAllPoints();
+        // Select four points to get the measurements
+        List<Point> pointList = pointService.getAllPoints().subList(0, 4);
 
+        // Get service interface for measurements
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
-        List<Measurement> measurements = measurementService.getMeasurementsByPoints(pointList);
+        // Get the latest measurements for the list of points
+        List<Measurement> measurementList = measurementService.getMeasurementsByPoints(pointList);
 
-        System.out.println("Found measurements: " + measurements.size());
+        // Display latest measurements for the points
+        for (Measurement measurement : measurementList) {
+            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + new Date(measurement.getTime()));
+        }
     }
 
 
@@ -124,6 +175,20 @@ public class MeasurementsExample {
         }
 
         System.exit(result);
+    }
+
+    public static String buildValueString(Measurement measurement) {
+        if(measurement.getType() == Measurement.Type.BOOL) {
+            return Boolean.toString(measurement.getBoolVal());
+        } else if(measurement.getType() == Measurement.Type.INT) {
+            return Long.toString(measurement.getIntVal());
+        } else if(measurement.getType() == Measurement.Type.DOUBLE) {
+            return Double.toString(measurement.getDoubleVal());
+        } else if(measurement.getType() == Measurement.Type.STRING) {
+            return measurement.getStringVal();
+        } else {
+            return "";
+        }
     }
 
 }

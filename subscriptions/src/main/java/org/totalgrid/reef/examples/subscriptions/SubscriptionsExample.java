@@ -13,18 +13,35 @@ import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
 import org.totalgrid.reef.proto.Model.ReefUUID;
 
+import javax.swing.plaf.metal.MetalBorders;
 import java.util.List;
 
-
+/**
+ * Example: Subscriptions
+ *
+ */
 public class SubscriptionsExample {
 
+    /**
+     * Implements the SubscriptionEventAcceptor, which provides a callback to be notified
+     * of new subscription events, in this case for measurements.
+     *
+     */
     public static class MeasurementSubscriber implements SubscriptionEventAcceptor<Measurement> {
 
+        /**
+         * Receives notifications when subscription events (measurements) happen
+         * in the system.
+         *
+         * @param measurementSubscriptionEvent
+         */
         @Override
         public void onEvent(SubscriptionEvent<Measurement> measurementSubscriptionEvent) {
 
+            // Type of the Event (ADDED, MODIFIED, REMOVED)
             Envelope.Event eventType = measurementSubscriptionEvent.getEventType();
 
+            // Measurement associated with the event
             Measurement measurement = measurementSubscriptionEvent.getValue();
 
             System.out.println("Event Type: " + eventType);
@@ -32,30 +49,54 @@ public class SubscriptionsExample {
         }
     }
 
+    /**
+     * Subscribe to Measurements
+     *
+     * Subscribes to measurement updates for all points.
+     *
+     * @param client
+     * @throws ReefServiceException
+     * @throws InterruptedException
+     */
     public static void subscribeToMeasurements(Client client) throws ReefServiceException, InterruptedException  {
 
         System.out.print("\n=== Measurement Subscription ===\n\n");
 
+        // Get service interface for points
         PointService pointService = client.getRpcInterface(PointService.class);
 
+        // Retrieve list of all points in the system
         List<Point> pointList = pointService.getAllPoints();
 
+        // Get service interface for measurements
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Subscribe to measurements using the list of points, obtaining a subscription result.
+        // The subscription result contains both the immediate result of the request (the current measurement values)
+        // and a Subscription object, which can be provided with a callback that will be notified when new
+        // measurements arrive.
         SubscriptionResult<List<Measurement>, Measurement> result = measurementService.subscribeToMeasurementsByPoints(pointList);
 
+        // Get the list of current measurements
         List<Measurement> currentMeasurements = result.getResult();
 
+        // Display the current measurements
         for (Measurement measurement : currentMeasurements) {
             System.out.println("Current Measurement: " + measurement.getName() + ", " + buildValueString(measurement));
         }
 
-        System.out.println("\nMeasurment Events:\n");
+        System.out.println("\nMeasurement Events:\n");
 
+        // Build a MeasurementSubscriber callback to accept subscription events
         MeasurementSubscriber subscriber = new MeasurementSubscriber();
 
-        result.getSubscription().start(subscriber);
+        // Get the Subscription object from the SubscriptionResult
+        Subscription<Measurement> subscription = result.getSubscription();
 
+        // Start the subscription, providing the MeasurementSubscriber as a callback
+        subscription.start(subscriber);
+
+        // Receive new measurements for fifteen seconds
         Thread.sleep(15 * 1000);
     }
 

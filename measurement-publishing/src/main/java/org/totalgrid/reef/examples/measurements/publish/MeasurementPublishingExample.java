@@ -17,37 +17,65 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Examples: Measurement Publishing
+ *
+ */
 public class MeasurementPublishingExample {
 
+    /**
+     * Publish Measurement
+     *
+     * Publishes a new measurement to a random point.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void publishMeasurement(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Publish Measurement ===\n\n");
 
+        // Get service interface for points
         PointService pointService = client.getRpcInterface(PointService.class);
 
+        // Get service interface for measurements
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Select a single point to publish measurements to
         Point point = pointService.getAllPoints().get(0);
 
         System.out.println("Publishing to point: " + point.getName());
 
+        // Create new measurement
         Measurement.Builder builder = Measurement.newBuilder();
 
+        // Set name of measusrement (must be the same name as the point)
         builder.setName(point.getName());
+
+        // Set unit of the measurement
         builder.setUnit("raw");
+
+        // Set the value type to INT (integer)
         builder.setType(Measurement.Type.INT);
+
+        // Set the integer value
         builder.setIntVal(3462);
+
+        // Set quality to normal (default)
         builder.setQuality(Measurements.Quality.newBuilder());
 
         Measurement measurement = builder.build();
 
+        // Create a list of measurements (the measurement "batch") contain the new measurement
         List<Measurement> batch = new ArrayList<Measurement>();
         batch.add(measurement);
 
+        // Publish measurement, returning success/failure
         boolean wasPublished = measurementService.publishMeasurements(batch);
 
         System.out.println("Was published: " + wasPublished);
 
+        // Verify that the latest measurement value is what was published
         Measurement latest = measurementService.getMeasurementByPoint(point);
 
         System.out.println("Measurement: " + latest.getName() + ", Value: " + buildValueString(latest) + ", Time: " + new Date(latest.getTime()));

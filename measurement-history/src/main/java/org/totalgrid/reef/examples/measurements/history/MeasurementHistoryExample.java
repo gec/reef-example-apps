@@ -15,72 +15,106 @@ import org.totalgrid.reef.proto.Model.Point;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Example: Measurement History
+ *
+ *
+ */
 public class MeasurementHistoryExample {
 
-
+    /**
+     * Get Measurement History
+     *
+     * Gets five most recent measurements for a point.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMeasurementHistory(Client client, Point point) throws ReefServiceException {
 
         System.out.print("\n=== Measurement History ===\n\n");
 
+        // Get service interface for events
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Limit the results to five; there are a potentially large number of measurements in the history
         int limit = 5;
 
+        // Retrieve a list of the last five measurements for the point
         List<Measurement> measurementList = measurementService.getMeasurementHistory(point, limit);
 
+        // Display measurement history
         for (Measurement measurement : measurementList) {
-
-            Date time = new Date(measurement.getTime());
-
-            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + time);
+            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + new Date(measurement.getTime()));
         }
 
     }
 
+    /**
+     * Get Measurement History Since
+     *
+     * Gets measurement history for the last five minutes (limited to five results).
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMeasurementHistorySince(Client client, Point point) throws ReefServiceException {
 
         System.out.print("\n=== Measurement History (Last 5 Minutes) ===\n\n");
 
+        // Get service interface for events
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Specify the time as five minutes ago
         long fiveMinutesAgo = System.currentTimeMillis() - (5 * 60 * 1000);
 
+        // Limit the results to five; there are a potentially large number of measurements in the history
         int limit = 5;
 
+        // Retrieve a list of measurements in the last five minutes (limited to five)
         List<Measurement> measurementList = measurementService.getMeasurementHistory(point, fiveMinutesAgo, limit);
 
+        // Display measurement history
         for (Measurement measurement : measurementList) {
-
-            Date time = new Date(measurement.getTime());
-
-            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + time);
+            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + new Date(measurement.getTime()));
         }
 
     }
 
+    /**
+     * Get Measurement History Interval
+     *
+     * Gets measurement history for the time period of twenty minutes ago to five minutes ago (limited to ten results).
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getMeasurementHistoryInterval(Client client, Point point) throws ReefServiceException {
 
         System.out.print("\n=== Measurement History (Interval: 20 Minutes Ago to 5 Minutes Ago) ===\n\n");
 
+        // Get service interface for events
         MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
 
+        // Specify the start time as twenty minutes ago
         long twentyMinutesAgo = System.currentTimeMillis() - (20 * 60 * 1000);
 
+        // Specify the end time as five minutes ago
         long fiveMinutesAgo = System.currentTimeMillis() - (5 * 60 * 1000);
 
+        // Specify that the newest measurements in the interval should be returned
         boolean returnNewest = true;
 
+        // Limit the results to ten; there are a potentially large number of measurements in the history
         int limit = 10;
 
+        // Retrieve a list of measurements in the time interval (limited to ten)
         List<Measurement> measurementList = measurementService.getMeasurementHistory(point, twentyMinutesAgo, fiveMinutesAgo, returnNewest, limit);
 
+        // Display measurement history
         for (Measurement measurement : measurementList) {
-
-            Date time = new Date(measurement.getTime());
-
-            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + time);
+            System.out.println("Measurement: " + measurement.getName() + ", Value: " + buildValueString(measurement) + ", Time: " + new Date(measurement.getTime()));
         }
-
     }
 
 
@@ -125,8 +159,10 @@ public class MeasurementHistoryExample {
 
             // Run examples...
 
+            // Get service interface for points
             PointService pointService = client.getRpcInterface(PointService.class);
 
+            // Select a single point to use as an example
             Point point = pointService.getAllPoints().get(0);
 
             getMeasurementHistory(client, point);
