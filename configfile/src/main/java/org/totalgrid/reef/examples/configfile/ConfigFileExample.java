@@ -16,19 +16,36 @@ import sun.security.krb5.Config;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+/**
+ * Example: ConfigFile
+ *
+ * ConfigFiles are used to store arbitrary data (byte arrays) used by protocols and
+ * applications.
+ */
 public class ConfigFileExample {
 
-
+    /**
+     * Get ConfigFile
+     *
+     * Retrieves the list of ConfigFiles in the system.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void getConfigFile(Client client) throws ReefServiceException, UnsupportedEncodingException {
 
         System.out.print("\n=== Get Config Files ===\n\n");
 
+        // Get service interface for ConfigFiles
         ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
 
+        // Get full list of ConfigFiles in the system
         List<ConfigFile> configFileList = configFileService.getAllConfigFiles();
 
+        // Inspect the first ConfigFile object
         ConfigFile first = configFileList.get(0);
 
+        // Display properties of the ConfigFile object
         System.out.println("ConfigFile");
         System.out.println("-----------");
         System.out.println("Name: " + first.getName());
@@ -41,55 +58,85 @@ public class ConfigFileExample {
         }
         System.out.println("-----------\n");
 
+        // List ConfigFiles in the system
         for (ConfigFile configFile : configFileList) {
             System.out.println("ConfigFile: " + configFile.getName());
         }
     }
 
+    /**
+     * Create/Update/Remove
+     *
+     * Runs through the lifecycle of ConfigFile objects. Creates a new ConfigFile,
+     * updates it to change the data payload, and finally deletes it from the system.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void createUpdateRemove(Client client) throws ReefServiceException, UnsupportedEncodingException {
 
         System.out.print("\n=== Create / Update / Remove File ===\n\n");
 
+        // Get service interface for ConfigFiles
         ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
 
+        // Specify the name, mime-type, and data payload for a ConfigFile
         String name = "ExampleFile01";
         String mimeType = "text/plain";
         String initialData = "Example Config File Data";
 
+        // Create the ConfigFile
         ConfigFile created = configFileService.createConfigFile(name, mimeType, initialData.getBytes("UTF-8"));
 
         System.out.println("Created - Name: " + created.getName() + ", Mime-type: " + created.getMimeType() + ", Data: \"" + created.getFile().toStringUtf8() + "\", UUID: " + created.getUuid());
 
+        // Specify a new data payload
         String updatedData = "Second Config File Data";
 
+        // Update the ConfigFile with the new data payload
         ConfigFile updated = configFileService.updateConfigFile(created, updatedData.getBytes("UTF-8"));
 
         System.out.println("Updated - Name: " + updated.getName() + ", Mime-type: " + updated.getMimeType() + ", Data: \"" + updated.getFile().toStringUtf8() + "\", UUID: " + updated.getUuid());
 
+        // Delete the ConfigFile from the system
         ConfigFile deleted = configFileService.deleteConfigFile(updated);
 
         System.out.println("Deleted - Name: " + deleted.getName() + ", Mime-type: " + deleted.getMimeType() + ", Data: \"" + deleted.getFile().toStringUtf8() + "\", UUID: " + deleted.getUuid());
 
+        // Verify the ConfigFile no long exists by searching for it
         boolean wasDeleted = configFileService.findConfigFileByName(name) == null;
 
         System.out.println("Was deleted: " + wasDeleted);
 
     }
 
+    /**
+     * Entity Association
+     *
+     * Demonstrates associating ConfigFiles with entities.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void entityAssociation(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Entity Association ===\n\n");
 
+        // Get service interface for ConfigFiles
         ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
 
+        // Get service interface for Entity objects
         EntityService entityService = client.getRpcInterface(EntityService.class);
 
+        // Get the a single Entity in the system
         Entity entity = entityService.getAllEntities().get(0);
 
         System.out.println("Entity: " + entity.getName() + ", " + entity.getUuid().getUuid() + "\n");
 
+        // Create a ConfigFile (not yet associated with an Entity)
         ConfigFile file1 = configFileService.createConfigFile("File1", "text/plain", "data1".getBytes());
 
+        // Display properties of the ConfigFile object before the association
         System.out.println("Before:");
         System.out.println("-----------");
         System.out.println("Name: " + file1.getName());
@@ -102,8 +149,10 @@ public class ConfigFileExample {
         }
         System.out.println("-----------\n");
 
+        // Associate the ConfigFile with the selected Entity
         ConfigFile associated = configFileService.addConfigFileUsedByEntity(file1, entity.getUuid());
 
+        // Display properties of the ConfigFile object after the association
         System.out.println("After:");
         System.out.println("-----------");
         System.out.println("Name: " + associated.getName());
@@ -116,6 +165,7 @@ public class ConfigFileExample {
         }
         System.out.println("-----------\n");
 
+        // Delete the ConfigFile to clean-up
         configFileService.deleteConfigFile(associated);
 
     }

@@ -15,21 +15,37 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Examples: Event Publishing
+ *
+ */
 public class EventPublishingExample {
 
-
+    /**
+     * Publish Event
+     *
+     * Publish a user login event.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void publishEvent(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Publish Event ===\n\n");
 
+        // Get service interface for publishing events
         EventCreationService eventCreationService = client.getRpcInterface(EventCreationService.class);
 
+        // Set event type to user login
         String eventType = "System.UserLogin";
 
+        // Set subsystem to generic "system"
         String subsystem = "system";
 
+        // Publish event by specifying type and subsystem
         Event published = eventCreationService.publishEvent(eventType, subsystem);
 
+        // Display properties of published Event
         System.out.println("Event");
         System.out.println("-----------");
         System.out.println("Uid: " + published.getUid());
@@ -44,28 +60,47 @@ public class EventPublishingExample {
 
     }
 
+    /**
+     * Publish Event
+     *
+     * Publish a user login event with arguments. Arguments are used to provide event-specific
+     * details. Their structure is determined by the event type.
+     *
+     * @param client Logged-in Client object
+     * @throws ReefServiceException
+     */
     public static void publishEventWithArguments(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Publish Event With Arguments ===\n\n");
 
+        // Get service interface for publishing events
         EventCreationService eventCreationService = client.getRpcInterface(EventCreationService.class);
 
+        // Set event type to user login
         String eventType = "System.UserLogin";
 
+        // Set subsystem to generic "system"
         String subsystem = "system";
 
+        // The "System.UserLogin" type has two arguments: "status" and "reason"
+
+        // Create attribute for "status"
         Attribute status = Attribute.newBuilder().setName("status").setValueString("StatusArg").setVtype(Attribute.Type.STRING).build();
 
+        // Create attribute for "reason"
         Attribute reason = Attribute.newBuilder().setName("reason").setValueString("ReasonArg").setVtype(Attribute.Type.STRING).build();
 
+        // Create list of attributes
         List<Attribute> attributeList = new ArrayList<Attribute>();
 
         attributeList.add(status);
 
         attributeList.add(reason);
 
+        // Publish event, including attributes
         Event published = eventCreationService.publishEvent(eventType, subsystem, attributeList);
 
+        // Display properties of published Event, message will include status/reason
         System.out.println("Event");
         System.out.println("-----------");
         System.out.println("Uid: " + published.getUid());

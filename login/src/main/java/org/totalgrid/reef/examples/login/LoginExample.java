@@ -8,6 +8,13 @@ import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
 import org.totalgrid.reef.clientapi.settings.AmqpSettings;
 import org.totalgrid.reef.clientapi.settings.UserSettings;
 
+/**
+ * Example: Login
+ *
+ * Basic example the rest of the examples are based on. Demonstrates
+ * the procedure for connecting to the server and logging in.
+ *
+ */
 public class LoginExample {
 
 
