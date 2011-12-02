@@ -1,15 +1,16 @@
 package org.totalgrid.reef.examples.commands;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.CommandService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.service.CommandService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Commands.UserCommandRequest;
-import org.totalgrid.reef.proto.Commands.CommandAccess;
+import org.totalgrid.reef.proto.Commands.CommandLock;
 import org.totalgrid.reef.proto.Commands.CommandStatus;
 import org.totalgrid.reef.proto.Model;
 import org.totalgrid.reef.proto.Model.Command;
@@ -37,7 +38,7 @@ public class CommandsExample {
         System.out.print("\n=== Get Commands ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get full list of Command objects in the system
         List<Command> commandList = commandService.getCommands();
@@ -48,11 +49,11 @@ public class CommandsExample {
         // Display properties of the Command object
         System.out.println("Command");
         System.out.println("-----------");
-        System.out.println("Uuid: " + command.getUuid().getUuid());
+        System.out.println("Uuid: " + command.getUuid().getValue());
         System.out.println("Name: " + command.getName());
         System.out.println("Display name: " + command.getDisplayName());
         System.out.println("Type: " + command.getType());
-        System.out.println("Logical node: " + command.getLogicalNode().getName());
+        System.out.println("Logical node: " + command.getEndpoint().getName());
         System.out.println("Entity: " + command.getEntity().getName());
         System.out.println("-----------\n");
 
@@ -69,7 +70,7 @@ public class CommandsExample {
      * simultaneous executions from other agents. This example acquires a lock
      * for a single Command.
      *
-     * Execution locks are CommandAccess objects with the mode "ALLOWED"
+     * Execution locks are CommandLock objects with the mode "ALLOWED"
      *
      * @param client Logged-in Client object
      * @throws ReefServiceException
@@ -79,30 +80,30 @@ public class CommandsExample {
         System.out.print("\n=== Execution Lock ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get a single Command object
         Command command = commandService.getCommands().get(0);
 
         // Create a command execution lock for the Command object
-        // CommandAccess objects describe executions locks
-        CommandAccess commandAccess = commandService.createCommandExecutionLock(command);
+        // CommandLock objects describe executions locks
+        CommandLock commandLock = commandService.createCommandExecutionLock(command);
 
-        // Display the properties of the CommandAccess object
+        // Display the properties of the CommandLock object
         System.out.println("Command Access");
         System.out.println("-----------");
-        System.out.println("Uid: " + commandAccess.getUid());
-        System.out.println("User: " + commandAccess.getUser());
-        System.out.println("Access: " + commandAccess.getAccess());
-        System.out.println("Expire Time: " + new Date(commandAccess.getExpireTime()));
+        System.out.println("Uid: " + commandLock.getId());
+        System.out.println("User: " + commandLock.getUser());
+        System.out.println("Access: " + commandLock.getAccess());
+        System.out.println("Expire Time: " + new Date(commandLock.getExpireTime()));
 
-        for (String cmd : commandAccess.getCommandsList()) {
-            System.out.println("Command: " + cmd);
+        for (Command cmd : commandLock.getCommandsList()) {
+            System.out.println("Command: " + cmd.getName());
         }
         System.out.println("-----------\n");
 
         // Remove the command lock from the system, cleaning up
-        commandService.deleteCommandLock(commandAccess);
+        commandService.deleteCommandLock(commandLock);
     }
 
     /**
@@ -111,7 +112,7 @@ public class CommandsExample {
      * Locks may be acquired for multiple Commands to ensure exclusive access during operations
      * across different objects. This example acquires a lock for three Commands.
      *
-     * Execution locks are CommandAccess objects with the mode "ALLOWED"
+     * Execution locks are CommandLock objects with the mode "ALLOWED"
      *
      * @param client Logged-in Client object
      * @throws ReefServiceException
@@ -121,14 +122,14 @@ public class CommandsExample {
         System.out.print("\n=== Multiple Execution Lock ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get three Command objects
         List<Command> commandList = commandService.getCommands().subList(0, 3);
 
         // Create a command execution lock for the Command objects
-        // CommandAccess objects describe executions locks
-        CommandAccess commandAccess = commandService.createCommandExecutionLock(commandList);
+        // CommandLock objects describe executions locks
+        CommandLock commandLock = commandService.createCommandExecutionLock(commandList);
 
         System.out.print("Locking commands: ");
         for (Command cmd: commandList) {
@@ -136,21 +137,21 @@ public class CommandsExample {
         }
         System.out.print("\n\n");
 
-        // Display the properties of the CommandAccess object
+        // Display the properties of the CommandLock object
         System.out.println("Command Access");
         System.out.println("-----------");
-        System.out.println("Uid: " + commandAccess.getUid());
-        System.out.println("User: " + commandAccess.getUser());
-        System.out.println("Access: " + commandAccess.getAccess());
-        System.out.println("Expire Time: " + new Date(commandAccess.getExpireTime()));
+        System.out.println("Uid: " + commandLock.getId());
+        System.out.println("User: " + commandLock.getUser());
+        System.out.println("Access: " + commandLock.getAccess());
+        System.out.println("Expire Time: " + new Date(commandLock.getExpireTime()));
 
-        for (String cmd : commandAccess.getCommandsList()) {
-            System.out.println("Command: " + cmd);
+        for (Command cmd : commandLock.getCommandsList()) {
+            System.out.println("Command: " + cmd.getName());
         }
         System.out.println("-----------\n");
 
         // Remove the command lock from the system, cleaning up
-        commandService.deleteCommandLock(commandAccess);
+        commandService.deleteCommandLock(commandLock);
     }
 
     /**
@@ -159,7 +160,7 @@ public class CommandsExample {
      * Command denial locks prevent all command execution. This examples acquires a denial lock
      * for three Commands.
      *
-     * Execution locks are CommandAccess objects with the mode "BLOCKED"
+     * Execution locks are CommandLock objects with the mode "BLOCKED"
      *
      * @param client Logged-in Client object
      * @throws ReefServiceException
@@ -169,14 +170,14 @@ public class CommandsExample {
         System.out.print("\n=== Execution Denial Lock ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get three Command objects
         List<Command> commandList = commandService.getCommands().subList(0, 3);
 
         // Create a command denial lock for the Command objects
-        // CommandAccess objects describe executions locks
-        CommandAccess commandAccess = commandService.createCommandDenialLock(commandList);
+        // CommandLock objects describe executions locks
+        CommandLock commandLock = commandService.createCommandDenialLock(commandList);
 
         System.out.print("Locking commands: ");
         for (Command cmd: commandList) {
@@ -184,21 +185,21 @@ public class CommandsExample {
         }
         System.out.print("\n\n");
 
-        // Display the properties of the CommandAccess object
+        // Display the properties of the CommandLock object
         System.out.println("Command Access");
         System.out.println("-----------");
-        System.out.println("Uid: " + commandAccess.getUid());
-        System.out.println("User: " + commandAccess.getUser());
-        System.out.println("Access: " + commandAccess.getAccess());
-        System.out.println("Expire Time: " + new Date(commandAccess.getExpireTime()));
+        System.out.println("Uid: " + commandLock.getId());
+        System.out.println("User: " + commandLock.getUser());
+        System.out.println("Access: " + commandLock.getAccess());
+        System.out.println("Expire Time: " + new Date(commandLock.getExpireTime()));
 
-        for (String cmd : commandAccess.getCommandsList()) {
-            System.out.println("Command: " + cmd);
+        for (Command cmd : commandLock.getCommandsList()) {
+            System.out.println("Command: " + cmd.getName());
         }
         System.out.println("-----------\n");
 
         // Remove the command lock from the system, cleaning up
-        commandService.deleteCommandLock(commandAccess);
+        commandService.deleteCommandLock(commandLock);
     }
 
     /**
@@ -215,7 +216,7 @@ public class CommandsExample {
         System.out.print("\n=== Execute Control ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get list of all Commands
         List<Command> commandList = commandService.getCommands();
@@ -232,9 +233,9 @@ public class CommandsExample {
         System.out.println("Command to execute: " + control.getName());
 
         // Get execution lock for selected control
-        CommandAccess commandAccess = commandService.createCommandExecutionLock(control);
+        CommandLock commandLock = commandService.createCommandExecutionLock(control);
 
-        System.out.println("Command access: " + commandAccess.getAccess());
+        System.out.println("Command access: " + commandLock.getAccess());
 
         // Execute the control. The CommandStatus enumeration describes the result of the
         // execution ("SUCCESS" if successful)
@@ -243,7 +244,7 @@ public class CommandsExample {
         System.out.println("Command result: " + commandStatus);
 
         // Remove the command lock from the system, cleaning up
-        commandService.deleteCommandLock(commandAccess);
+        commandService.deleteCommandLock(commandLock);
 
         // Get the history of command executions (UserCommandRequests) for the Command
         List<UserCommandRequest> commandRequestList = commandService.getCommandHistory(control);
@@ -254,9 +255,9 @@ public class CommandsExample {
         // Display the properties of the control we executed
         System.out.println("\nUserCommandRequest");
         System.out.println("-----------");
-        System.out.println("Uid: " + lastRequest.getUid());
+        System.out.println("Uid: " + lastRequest.getId());
         System.out.println("Status: " + lastRequest.getStatus());
-        System.out.println("Name: " + lastRequest.getCommandRequest().getName());
+        System.out.println("Name: " + lastRequest.getCommandRequest().getCommand().getName());
         System.out.println("User: " + lastRequest.getUser());
         System.out.println("Type: " + lastRequest.getCommandRequest().getType());
         System.out.println("-----------");
@@ -276,7 +277,7 @@ public class CommandsExample {
         System.out.print("\n=== Execute Setpoint ===\n\n");
 
         // Get service interface for commands
-        CommandService commandService = client.getRpcInterface(CommandService.class);
+        CommandService commandService = client.getService(CommandService.class);
 
         // Get list of all Commands
         List<Command> commandList = commandService.getCommands();
@@ -293,9 +294,9 @@ public class CommandsExample {
         System.out.println("Command to execute: " + setpoint.getName());
 
         // Get execution lock for selected setpoint
-        CommandAccess commandAccess = commandService.createCommandExecutionLock(setpoint);
+        CommandLock commandLock = commandService.createCommandExecutionLock(setpoint);
 
-        System.out.println("Command access: " + commandAccess.getAccess());
+        System.out.println("Command access: " + commandLock.getAccess());
 
         // Execute the control. The CommandStatus enumeration describes the result of the
         // execution ("SUCCESS" if successful)
@@ -304,7 +305,7 @@ public class CommandsExample {
         System.out.println("Command result: " + commandStatus);
 
         // Remove the command lock from the system, cleaning up
-        commandService.deleteCommandLock(commandAccess);
+        commandService.deleteCommandLock(commandLock);
 
         // Get the history of command executions (UserCommandRequests) for the Command
         List<UserCommandRequest> commandRequestList = commandService.getCommandHistory(setpoint);
@@ -315,9 +316,9 @@ public class CommandsExample {
         // Display the properties of the setpoint we executed
         System.out.println("\nUserCommandRequest");
         System.out.println("-----------");
-        System.out.println("Uid: " + lastRequest.getUid());
+        System.out.println("Uid: " + lastRequest.getId());
         System.out.println("Status: " + lastRequest.getStatus());
-        System.out.println("Name: " + lastRequest.getCommandRequest().getName());
+        System.out.println("Name: " + lastRequest.getCommandRequest().getCommand().getName());
         System.out.println("User: " + lastRequest.getUser());
         System.out.println("Type: " + lastRequest.getCommandRequest().getType());
         System.out.println("Value: " + lastRequest.getCommandRequest().getDoubleVal());
@@ -351,7 +352,7 @@ public class CommandsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

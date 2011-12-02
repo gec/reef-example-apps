@@ -1,13 +1,14 @@
 package org.totalgrid.reef.examples.applications;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.ApplicationService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.service.ApplicationService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Application.ApplicationConfig;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class ApplicationsExample {
         System.out.print("\n=== Get Applications ===\n\n");
 
         // Get service interface for applications
-        ApplicationService applicationService = client.getRpcInterface(ApplicationService.class);
+        ApplicationService applicationService = client.getService(ApplicationService.class);
 
         // Get list of registered applications
         List<ApplicationConfig> applicationConfigList = applicationService.getApplications();
@@ -43,7 +44,7 @@ public class ApplicationsExample {
         // Display properties of ApplicationConfig
         System.out.println("ApplicationConfig");
         System.out.println("-----------");
-        System.out.println("Uuid: " + applicationConfig.getUuid().getUuid());
+        System.out.println("Uuid: " + applicationConfig.getUuid().getValue());
         System.out.println("Instance Name: " + applicationConfig.getInstanceName());
         System.out.println("Capabilities: " + applicationConfig.getCapabilitesList());
         System.out.println("Location: " + applicationConfig.getLocation());
@@ -83,7 +84,7 @@ public class ApplicationsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

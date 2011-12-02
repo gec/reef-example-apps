@@ -1,13 +1,13 @@
 package org.totalgrid.reef.examples.entities;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.EntityService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.EntityService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Model.Relationship;
 import org.totalgrid.reef.proto.Model.Entity;
 import org.totalgrid.reef.proto.Model.ReefUUID;
@@ -33,7 +33,7 @@ public class EntitiesExample {
         System.out.print("\n=== Get Entities ===\n\n");
 
         // Get service interface for entities
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Retrieve list of all entities in the system
         List<Entity> entityList = entityService.getAllEntities();
@@ -44,7 +44,7 @@ public class EntitiesExample {
         // Display properties of Entity object
         System.out.println("Entity");
         System.out.println("-----------");
-        System.out.println("Uuid: " + first.getUuid().getUuid());
+        System.out.println("Uuid: " + first.getUuid().getValue());
         System.out.println("Name: " + first.getName());
         System.out.println("Types: " + first.getTypesList());
         System.out.println("-----------\n");
@@ -72,7 +72,7 @@ public class EntitiesExample {
         System.out.print("\n=== Get Entities With Type ===\n\n");
 
         // Get service interface for entities
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Get Entity objects with the type "Breaker"
         List<Entity> entityList = entityService.getAllEntitiesWithType("Breaker");
@@ -99,7 +99,7 @@ public class EntitiesExample {
         System.out.print("\n=== Get Immediate Children ===\n\n");
 
         // Get service interface for entities
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Select an Entity of type "Equipment"
         Entity equipment = entityService.getAllEntitiesWithType("Equipment").get(0);
@@ -135,7 +135,7 @@ public class EntitiesExample {
         System.out.print("\n=== Get Children ===\n\n");
 
         // Get service interface for entities
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Select an Entity of type "EquipmentGroup"
         Entity equipmentGroup = entityService.getAllEntitiesWithType("EquipmentGroup").get(0);
@@ -195,7 +195,7 @@ public class EntitiesExample {
         System.out.print("\n=== Entity Tree ===\n\n");
 
         // Get service interface for entities
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Select a single Entity of type "Point"
         Entity point = entityService.getAllEntitiesWithType("Point").get(0);
@@ -296,7 +296,7 @@ public class EntitiesExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

@@ -1,7 +1,7 @@
 package org.totalgrid.reef.examples.stateoptimizer;
 
 
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
+import org.totalgrid.reef.client.exception.ReefServiceException;
 
 /**
  * sample switching algorithm

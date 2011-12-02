@@ -1,12 +1,13 @@
 package org.totalgrid.reef.examples.login;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 
 /**
  * Example: Login
@@ -44,7 +45,7 @@ public class LoginExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

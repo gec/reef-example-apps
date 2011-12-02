@@ -1,14 +1,14 @@
 package org.totalgrid.reef.examples.measurements;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.MeasurementService;
-import org.totalgrid.reef.client.rpc.PointService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.MeasurementService;
+import org.totalgrid.reef.client.service.PointService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
 
@@ -34,13 +34,13 @@ public class MeasurementsExample {
         System.out.print("\n=== Measurement By Point ===\n\n");
 
         // Get service interface for points
-        PointService pointService = client.getRpcInterface(PointService.class);
+        PointService pointService = client.getService(PointService.class);
 
         // Select a specific point
         Point examplePoint = pointService.getAllPoints().get(0);
 
         // Get service interface for measurements
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Get latest measurement for the point
         Measurement measurement = measurementService.getMeasurementByPoint(examplePoint);
@@ -62,13 +62,13 @@ public class MeasurementsExample {
         System.out.print("\n=== Measurement By Name ===\n\n");
 
         // Get service interface for points
-        PointService pointService = client.getRpcInterface(PointService.class);
+        PointService pointService = client.getService(PointService.class);
 
         // Select a specific point, get its point name
         String pointName = pointService.getAllPoints().get(0).getName();
 
         // Get service interface for measurements
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Get latest measurement for the point by name
         Measurement measurement = measurementService.getMeasurementByName(pointName);
@@ -90,13 +90,13 @@ public class MeasurementsExample {
         System.out.print("\n=== Multiple Measurements ===\n\n");
 
         // Get service interface for points
-        PointService pointService = client.getRpcInterface(PointService.class);
+        PointService pointService = client.getService(PointService.class);
 
         // Select four points to get the measurements
         List<Point> pointList = pointService.getAllPoints().subList(0, 4);
 
         // Get service interface for measurements
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Get the latest measurements for the list of points
         List<Measurement> measurementList = measurementService.getMeasurementsByPoints(pointList);
@@ -134,7 +134,7 @@ public class MeasurementsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

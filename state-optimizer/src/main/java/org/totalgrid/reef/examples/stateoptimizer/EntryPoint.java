@@ -1,14 +1,14 @@
 package org.totalgrid.reef.examples.stateoptimizer;
 
 
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.AllScadaService;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.AllScadaService;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,12 +21,12 @@ public class EntryPoint {
 
 
     public static void startup(AmqpSettings amqp, UserSettings user) {
-        ConnectionFactory factory = new ReefConnectionFactory(amqp);
+        ConnectionFactory factory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
         Connection conn = null;
         try {
             conn = factory.connect();
             Client client = conn.login(user);
-            AllScadaService services = client.getRpcInterface(AllScadaService.class);
+            AllScadaService services = client.getService(AllScadaService.class);
             IStateOptimizer algorithm = new CapacitorSwitchingAlgorithm();
 
             // manager sets up timer to call algorithm.optimize on a timer

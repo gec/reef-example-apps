@@ -2,8 +2,8 @@ package org.totalgrid.reef.examples.stateoptimizer;
 
 
 
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.client.rpc.AllScadaService;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.AllScadaService;
 
 import java.io.IOException;
 import java.util.Timer;

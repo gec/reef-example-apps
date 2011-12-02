@@ -1,13 +1,13 @@
 package org.totalgrid.reef.examples.endpoints;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.EndpointManagementService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.EndpointManagementService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.FEP.CommEndpointConnection;
 import org.totalgrid.reef.proto.FEP.CommEndpointConfig;
 import org.totalgrid.reef.proto.Model.ReefUUID;
@@ -42,7 +42,7 @@ public class EndpointsExample {
         System.out.print("\n=== Get Endpoint Configurations ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getRpcInterface(EndpointManagementService.class);
+        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
 
         // Retrieve list of all endpoint configurations
         List<CommEndpointConfig> endpointConfigList = endpointService.getAllEndpoints();
@@ -55,12 +55,12 @@ public class EndpointsExample {
         System.out.println("-----------");
         System.out.println("Name: " + endpointConfig.getName());
         System.out.println("Protocol: " + endpointConfig.getProtocol());
-        System.out.println("Channel: " + endpointConfig.getChannel().getUuid().getUuid());
+        System.out.println("Channel: " + endpointConfig.getChannel().getUuid().getValue());
 
         // ConfigFiles are explicitly associated with endpoint configurations in order to provide
         // protocol configurations
         for (ConfigFile configFile : endpointConfig.getConfigFilesList()) {
-            System.out.println("Config File: " + configFile.getUuid().getUuid());
+            System.out.println("Config File: " + configFile.getUuid().getValue());
         }
 
         // Points (data inputs) are explicitly associated with endpoints
@@ -89,7 +89,7 @@ public class EndpointsExample {
         System.out.print("\n=== Get Endpoint Connections ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getRpcInterface(EndpointManagementService.class);
+        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
 
         // Retrieve a list of all endpoint connections
         List<CommEndpointConnection> endpointConnections = endpointService.getAllEndpointConnections();
@@ -110,7 +110,7 @@ public class EndpointsExample {
         System.out.print("\n=== Enable/Disable Endpoint ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getRpcInterface(EndpointManagementService.class);
+        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
 
         // Select a single endpoint connection
         CommEndpointConnection endpoint = endpointService.getAllEndpointConnections().get(0);
@@ -180,7 +180,7 @@ public class EndpointsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

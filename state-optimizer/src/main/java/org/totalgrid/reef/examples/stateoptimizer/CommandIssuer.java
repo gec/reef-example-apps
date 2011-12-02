@@ -1,9 +1,9 @@
 package org.totalgrid.reef.examples.stateoptimizer;
 
 
-import org.totalgrid.reef.clientapi.exceptions.ExpectationException;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.client.rpc.CommandService;
+import org.totalgrid.reef.client.exception.ExpectationException;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.CommandService;
 import org.totalgrid.reef.proto.Commands;
 import org.totalgrid.reef.proto.Model;
 
@@ -54,7 +54,7 @@ public class CommandIssuer {
             throw new IllegalArgumentException("No command with commandName: " + commandName + ". Known commands are :" + commandsToLock.keySet());
 
         // lock all commands in the system
-        Commands.CommandAccess select = commandService.createCommandExecutionLock(new LinkedList<Model.Command>(commandsToLock.values()));
+        Commands.CommandLock select = commandService.createCommandExecutionLock(new LinkedList<Model.Command>(commandsToLock.values()));
         try {
             Commands.CommandStatus result = commandService.executeCommandAsControl(cmd);
             System.out.println("Executed command: " + commandName + " result: " + result);

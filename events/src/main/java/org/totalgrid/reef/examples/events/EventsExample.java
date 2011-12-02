@@ -1,13 +1,13 @@
 package org.totalgrid.reef.examples.events;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.EventService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.EventService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Events.EventSelect;
 import org.totalgrid.reef.proto.Events.Event;
 
@@ -35,7 +35,7 @@ public class EventsExample {
         System.out.print("\n=== Recent Events ===\n\n");
 
         // Get service interface for events
-        EventService eventService = client.getRpcInterface(EventService.class);
+        EventService eventService = client.getService(EventService.class);
 
         // Get list of five most recent events
         List<Event> eventList = eventService.getRecentEvents(5);
@@ -75,7 +75,7 @@ public class EventsExample {
         System.out.print("\n=== Recent Events By Type ===\n\n");
 
         // Get service interface for events
-        EventService eventService = client.getRpcInterface(EventService.class);
+        EventService eventService = client.getService(EventService.class);
 
         // Create a list of a single type, user login
         List<String> typeList = new ArrayList<String>();
@@ -104,7 +104,7 @@ public class EventsExample {
         System.out.print("\n=== Search For Events By Severity ===\n\n");
 
         // Get service interface for events
-        EventService eventService = client.getRpcInterface(EventService.class);
+        EventService eventService = client.getService(EventService.class);
 
         // Create EventSelect object to describe our search
         EventSelect.Builder builder = EventSelect.newBuilder();
@@ -140,7 +140,7 @@ public class EventsExample {
         System.out.print("\n=== Search For Events By Interval ===\n\n");
 
         // Get service interface for events
-        EventService eventService = client.getRpcInterface(EventService.class);
+        EventService eventService = client.getService(EventService.class);
 
         // Create EventSelect object to describe our search
         EventSelect.Builder builder = EventSelect.newBuilder();
@@ -196,7 +196,7 @@ public class EventsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

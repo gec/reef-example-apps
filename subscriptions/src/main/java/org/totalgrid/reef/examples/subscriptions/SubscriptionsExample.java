@@ -1,13 +1,13 @@
 package org.totalgrid.reef.examples.subscriptions;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.MeasurementService;
-import org.totalgrid.reef.client.rpc.PointService;
-import org.totalgrid.reef.clientapi.*;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.proto.Envelope;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.MeasurementService;
+import org.totalgrid.reef.client.service.PointService;
+import org.totalgrid.reef.client.*;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.proto.Envelope;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Measurements;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
@@ -63,13 +63,13 @@ public class SubscriptionsExample {
         System.out.print("\n=== Measurement Subscription ===\n\n");
 
         // Get service interface for points
-        PointService pointService = client.getRpcInterface(PointService.class);
+        PointService pointService = client.getService(PointService.class);
 
         // Retrieve list of all points in the system
         List<Point> pointList = pointService.getAllPoints();
 
         // Get service interface for measurements
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Subscribe to measurements using the list of points, obtaining a subscription result.
         // The subscription result contains both the immediate result of the request (the current measurement values)
@@ -128,7 +128,7 @@ public class SubscriptionsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

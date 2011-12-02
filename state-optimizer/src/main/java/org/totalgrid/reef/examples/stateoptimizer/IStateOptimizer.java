@@ -1,7 +1,7 @@
 package org.totalgrid.reef.examples.stateoptimizer;
 
 
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
+import org.totalgrid.reef.client.exception.ReefServiceException;
 
 /**
  * A state optimizer is a simple sort of algorithm that is able to look at a single snapshot of the system

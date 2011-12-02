@@ -1,13 +1,13 @@
 package org.totalgrid.reef.examples.points;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.PointService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.PointService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Model.ReefUUID;
 import org.totalgrid.reef.proto.Model.Point;
 
@@ -32,7 +32,7 @@ public class PointsExample {
         System.out.print("\n=== Get All Points ===\n\n");
 
         // Get service interface for points
-        PointService service = client.getRpcInterface(PointService.class);
+        PointService service = client.getService(PointService.class);
 
         // Retrieve list of all points
         List<Point> pointList = service.getAllPoints();
@@ -45,12 +45,12 @@ public class PointsExample {
         // Display properties of the point
         System.out.println("Point");
         System.out.println("-----------");
-        System.out.println("Uuid: " + point.getUuid().getUuid());
+        System.out.println("Uuid: " + point.getUuid().getValue());
         System.out.println("Name: " + point.getName());
         System.out.println("Type: " + point.getType());
         System.out.println("Unit: " + point.getUnit());
         System.out.println("Abnormal: " + point.getAbnormal());
-        System.out.println("Endpoint: " + point.getLogicalNode().getName());
+        System.out.println("Endpoint: " + point.getEndpoint().getName());
         System.out.println("-----------");
     }
 
@@ -67,7 +67,7 @@ public class PointsExample {
         System.out.print("\n=== Get Point By Name ===\n\n");
 
         // Get service interface for points
-        PointService service = client.getRpcInterface(PointService.class);
+        PointService service = client.getService(PointService.class);
 
         // Select a single example point
         Point examplePoint = service.getAllPoints().get(0);
@@ -94,7 +94,7 @@ public class PointsExample {
         System.out.print("\n=== Get Point By UUID ===\n\n");
 
         // Get service interface for points
-        PointService service = client.getRpcInterface(PointService.class);
+        PointService service = client.getService(PointService.class);
 
         // Select a single example point
         Point examplePoint = service.getAllPoints().get(0);
@@ -135,7 +135,7 @@ public class PointsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

@@ -1,14 +1,14 @@
 package org.totalgrid.reef.examples.measurements.history;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.MeasurementService;
-import org.totalgrid.reef.client.rpc.PointService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.MeasurementService;
+import org.totalgrid.reef.client.service.PointService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
 
@@ -35,7 +35,7 @@ public class MeasurementHistoryExample {
         System.out.print("\n=== Measurement History ===\n\n");
 
         // Get service interface for events
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Limit the results to five; there are a potentially large number of measurements in the history
         int limit = 5;
@@ -63,7 +63,7 @@ public class MeasurementHistoryExample {
         System.out.print("\n=== Measurement History (Last 5 Minutes) ===\n\n");
 
         // Get service interface for events
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Specify the time as five minutes ago
         long fiveMinutesAgo = System.currentTimeMillis() - (5 * 60 * 1000);
@@ -94,7 +94,7 @@ public class MeasurementHistoryExample {
         System.out.print("\n=== Measurement History (Interval: 20 Minutes Ago to 5 Minutes Ago) ===\n\n");
 
         // Get service interface for events
-        MeasurementService measurementService = client.getRpcInterface(MeasurementService.class);
+        MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Specify the start time as twenty minutes ago
         long twentyMinutesAgo = System.currentTimeMillis() - (20 * 60 * 1000);
@@ -144,7 +144,7 @@ public class MeasurementHistoryExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
@@ -160,7 +160,7 @@ public class MeasurementHistoryExample {
             // Run examples...
 
             // Get service interface for points
-            PointService pointService = client.getRpcInterface(PointService.class);
+            PointService pointService = client.getService(PointService.class);
 
             // Select a single point to use as an example
             Point point = pointService.getAllPoints().get(0);

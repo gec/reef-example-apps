@@ -1,14 +1,14 @@
 package org.totalgrid.reef.examples.configfile;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.ConfigFileService;
-import org.totalgrid.reef.client.rpc.EntityService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.ConfigFileService;
+import org.totalgrid.reef.client.service.EntityService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Model.ConfigFile;
 import org.totalgrid.reef.proto.Model.Entity;
 import sun.security.krb5.Config;
@@ -37,7 +37,7 @@ public class ConfigFileExample {
         System.out.print("\n=== Get Config Files ===\n\n");
 
         // Get service interface for ConfigFiles
-        ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
+        ConfigFileService configFileService = client.getService(ConfigFileService.class);
 
         // Get full list of ConfigFiles in the system
         List<ConfigFile> configFileList = configFileService.getAllConfigFiles();
@@ -50,7 +50,7 @@ public class ConfigFileExample {
         System.out.println("-----------");
         System.out.println("Name: " + first.getName());
         System.out.println("Mime-type: " + first.getMimeType());
-        System.out.println("UUID: " + first.getUuid().getUuid());
+        System.out.println("UUID: " + first.getUuid().getValue());
         System.out.println("Data: \"" + first.getFile().toStringUtf8().substring(0, 30) + "...\"");
 
         for (Entity entity : first.getEntitiesList()) {
@@ -78,7 +78,7 @@ public class ConfigFileExample {
         System.out.print("\n=== Create / Update / Remove File ===\n\n");
 
         // Get service interface for ConfigFiles
-        ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
+        ConfigFileService configFileService = client.getService(ConfigFileService.class);
 
         // Specify the name, mime-type, and data payload for a ConfigFile
         String name = "ExampleFile01";
@@ -123,15 +123,15 @@ public class ConfigFileExample {
         System.out.print("\n=== Entity Association ===\n\n");
 
         // Get service interface for ConfigFiles
-        ConfigFileService configFileService = client.getRpcInterface(ConfigFileService.class);
+        ConfigFileService configFileService = client.getService(ConfigFileService.class);
 
         // Get service interface for Entity objects
-        EntityService entityService = client.getRpcInterface(EntityService.class);
+        EntityService entityService = client.getService(EntityService.class);
 
         // Get the a single Entity in the system
         Entity entity = entityService.getAllEntities().get(0);
 
-        System.out.println("Entity: " + entity.getName() + ", " + entity.getUuid().getUuid() + "\n");
+        System.out.println("Entity: " + entity.getName() + ", " + entity.getUuid().getValue() + "\n");
 
         // Create a ConfigFile (not yet associated with an Entity)
         ConfigFile file1 = configFileService.createConfigFile("File1", "text/plain", "data1".getBytes());
@@ -141,7 +141,7 @@ public class ConfigFileExample {
         System.out.println("-----------");
         System.out.println("Name: " + file1.getName());
         System.out.println("Mime-type: " + file1.getMimeType());
-        System.out.println("UUID: " + file1.getUuid().getUuid());
+        System.out.println("UUID: " + file1.getUuid().getValue());
         System.out.println("Data: \"" + file1.getFile().toStringUtf8());
 
         for (Entity used : file1.getEntitiesList()) {
@@ -157,7 +157,7 @@ public class ConfigFileExample {
         System.out.println("-----------");
         System.out.println("Name: " + associated.getName());
         System.out.println("Mime-type: " + associated.getMimeType());
-        System.out.println("UUID: " + associated.getUuid().getUuid());
+        System.out.println("UUID: " + associated.getUuid().getValue());
         System.out.println("Data: \"" + associated.getFile().toStringUtf8());
 
         for (Entity used : associated.getEntitiesList()) {
@@ -198,7 +198,7 @@ public class ConfigFileExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;

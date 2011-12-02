@@ -1,13 +1,14 @@
 package org.totalgrid.reef.examples.alarms;
 
-import org.totalgrid.reef.client.ReefConnectionFactory;
-import org.totalgrid.reef.client.rpc.AlarmService;
-import org.totalgrid.reef.clientapi.Client;
-import org.totalgrid.reef.clientapi.Connection;
-import org.totalgrid.reef.clientapi.ConnectionFactory;
-import org.totalgrid.reef.clientapi.exceptions.ReefServiceException;
-import org.totalgrid.reef.clientapi.settings.AmqpSettings;
-import org.totalgrid.reef.clientapi.settings.UserSettings;
+import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.service.AlarmService;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Connection;
+import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.settings.AmqpSettings;
+import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Alarms.Alarm;
 import org.totalgrid.reef.proto.Events.Event;
 
@@ -34,7 +35,7 @@ public class AlarmsExample {
         System.out.print("\n=== Active Alarms ===\n\n");
 
         // Get service interface for alarms
-        AlarmService alarmService = client.getRpcInterface(AlarmService.class);
+        AlarmService alarmService = client.getService(AlarmService.class);
 
         // Limit the number of objects returned to a manageable amount
         int limit = 5;
@@ -51,10 +52,10 @@ public class AlarmsExample {
         // Display the properties of the Alarm and Event objects
         System.out.println("Alarm");
         System.out.println("-----------");
-        System.out.println("Alarm Uid: " + firstAlarm.getUid());
+        System.out.println("Alarm Uid: " + firstAlarm.getId());
         System.out.println("State: " + firstAlarm.getState());
         System.out.println("Alarm Message: " + firstAlarm.getRendered());
-        System.out.println("Event Uid: " + firstEvent.getUid());
+        System.out.println("Event Uid: " + firstEvent.getId());
         System.out.println("User: " + firstEvent.getUserId());
         System.out.println("Type: " + firstEvent.getEventType());
         System.out.println("Severity: " + firstEvent.getSeverity());
@@ -85,7 +86,7 @@ public class AlarmsExample {
         System.out.print("\n=== Alarm Lifecycle ===\n\n");
 
         // Get service interface for alarms
-        AlarmService alarmService = client.getRpcInterface(AlarmService.class);
+        AlarmService alarmService = client.getService(AlarmService.class);
 
         // Get the first active alarm
         Alarm alarm = alarmService.getActiveAlarms(1).get(0);
@@ -132,7 +133,7 @@ public class AlarmsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp);
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
