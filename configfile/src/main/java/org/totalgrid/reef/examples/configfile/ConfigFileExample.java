@@ -7,11 +7,11 @@ import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.proto.Model.ConfigFile;
 import org.totalgrid.reef.proto.Model.Entity;
-import sun.security.krb5.Config;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ConfigFileExample {
         ConfigFileService configFileService = client.getService(ConfigFileService.class);
 
         // Get full list of ConfigFiles in the system
-        List<ConfigFile> configFileList = configFileService.getAllConfigFiles();
+        List<ConfigFile> configFileList = configFileService.getConfigFiles();
 
         // Inspect the first ConfigFile object
         ConfigFile first = configFileList.get(0);
@@ -129,7 +129,7 @@ public class ConfigFileExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Get the a single Entity in the system
-        Entity entity = entityService.getAllEntities().get(0);
+        Entity entity = entityService.getEntities().get(0);
 
         System.out.println("Entity: " + entity.getName() + ", " + entity.getUuid().getValue() + "\n");
 

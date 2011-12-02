@@ -1,15 +1,16 @@
 package org.totalgrid.reef.examples.endpoints;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
-import org.totalgrid.reef.client.service.EndpointManagementService;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.service.EndpointService;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.FEP.CommEndpointConnection;
-import org.totalgrid.reef.proto.FEP.CommEndpointConfig;
+import org.totalgrid.reef.proto.FEP.EndpointConnection;
+import org.totalgrid.reef.proto.FEP.Endpoint;
 import org.totalgrid.reef.proto.Model.ReefUUID;
 import org.totalgrid.reef.proto.Model.ConfigFile;
 
@@ -19,9 +20,9 @@ import java.util.List;
  * Example: Endpoints
  *
  * Endpoints manage the protocol connections to external devices and
- * systems.
+ * systems. There are two central service objects: endpoints and endpoint connections.
  *
- * Endpoint configurations are the system-wide representations of communications to remote
+ * Endpoints themselves are the system-wide representations of communications to remote
  * devices/systems. Communications are not established until responsibility for an endpoint is
  * assigned to a front end processor (FEP).
  *
@@ -42,13 +43,13 @@ public class EndpointsExample {
         System.out.print("\n=== Get Endpoint Configurations ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
+        EndpointService endpointService = client.getService(EndpointService.class);
 
         // Retrieve list of all endpoint configurations
-        List<CommEndpointConfig> endpointConfigList = endpointService.getAllEndpoints();
+        List<Endpoint> endpointConfigList = endpointService.getEndpoints();
 
         // Inspect a single endpoint configuration
-        CommEndpointConfig endpointConfig = endpointConfigList.get(0);
+        Endpoint endpointConfig = endpointConfigList.get(0);
 
         // Display properties of endpoint configuration
         System.out.println("Endpoint Config");
@@ -89,13 +90,13 @@ public class EndpointsExample {
         System.out.print("\n=== Get Endpoint Connections ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
+        EndpointService endpointService = client.getService(EndpointService.class);
 
         // Retrieve a list of all endpoint connections
-        List<CommEndpointConnection> endpointConnections = endpointService.getAllEndpointConnections();
+        List<EndpointConnection> endpointConnections = endpointService.getEndpointConnections();
 
         // Display list of endpoint connections, showing enabled/disabled status and COMMS status
-        for (CommEndpointConnection endpointConnection : endpointConnections) {
+        for (EndpointConnection endpointConnection : endpointConnections) {
             System.out.print("Endpoint: " + endpointConnection.getEndpoint().getName());
             System.out.print(", Enabled: " + endpointConnection.getEnabled());
             System.out.print(", State: " + endpointConnection.getState());
@@ -110,10 +111,10 @@ public class EndpointsExample {
         System.out.print("\n=== Enable/Disable Endpoint ===\n\n");
 
         // Get service interface for endpoints
-        EndpointManagementService endpointService = client.getService(EndpointManagementService.class);
+        EndpointService endpointService = client.getService(EndpointService.class);
 
         // Select a single endpoint connection
-        CommEndpointConnection endpoint = endpointService.getAllEndpointConnections().get(0);
+        EndpointConnection endpoint = endpointService.getEndpointConnections().get(0);
 
         // Display origin state (should be enabled, COMMS_UP)
         System.out.println("Original: " + endpoint.getEndpoint().getName() + ", " + endpoint.getEnabled() + ", " + endpoint.getState());
@@ -122,7 +123,7 @@ public class EndpointsExample {
         ReefUUID endpointUuid = endpoint.getEndpoint().getUuid();
 
         // Disable the endpoint connection
-        CommEndpointConnection disabled = endpointService.disableEndpointConnection(endpointUuid);
+        EndpointConnection disabled = endpointService.disableEndpointConnection(endpointUuid);
 
         // Display state immediately after disabled. Because the communication channel is managed asynchronously, state may still be COMMS_UP
         System.out.println("Disabled: " + disabled.getEndpoint().getName() + ", " + disabled.getEnabled() + ", " + disabled.getState());
@@ -131,13 +132,13 @@ public class EndpointsExample {
         Thread.sleep(1000);
 
         // Get state after one second
-        CommEndpointConnection disabledDelay = endpointService.getEndpointConnection(endpointUuid);
+        EndpointConnection disabledDelay = endpointService.getEndpointConnectionByUuid(endpointUuid);
 
         // Display one second after disabled. Should now be COMMS_DOWN
         System.out.println("Disabled +1s: " + disabledDelay.getEndpoint().getName() + ", " + disabledDelay.getEnabled() + ", " + disabledDelay.getState());
 
         // Re-enable endpoint connection
-        CommEndpointConnection enabled = endpointService.enableEndpointConnection(endpointUuid);
+        EndpointConnection enabled = endpointService.enableEndpointConnection(endpointUuid);
 
         // Display state immediately after enabled. Because the communication channel is managed asynchronously, state may still be COMMS_DOWN
         System.out.println("Enabled: " + enabled.getEndpoint().getName() + ", " + enabled.getEnabled() + ", " + enabled.getState());
@@ -146,7 +147,7 @@ public class EndpointsExample {
         Thread.sleep(1000);
 
         // Get state after one second
-        CommEndpointConnection enabledDelay = endpointService.getEndpointConnection(endpointUuid);
+        EndpointConnection enabledDelay = endpointService.getEndpointConnectionByUuid(endpointUuid);
 
         // Display one second after enabled. Should now be COMMS_UP
         System.out.println("Enabled +1s: " + enabledDelay.getEndpoint().getName() + ", " + enabledDelay.getEnabled() + ", " + enabledDelay.getState());

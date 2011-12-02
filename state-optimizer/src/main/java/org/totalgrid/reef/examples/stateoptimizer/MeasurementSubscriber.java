@@ -23,7 +23,7 @@ public class MeasurementSubscriber implements SubscriptionEventAcceptor<Measurem
     public MeasurementSubscriber(AllScadaService services) throws ReefServiceException {
 
         // get list of all points in system
-        List<Point> points = services.getAllPoints();
+        List<Point> points = services.getPoints();
         // TODO: filter points to only ones we plan on looking at
 
         SubscriptionResult<List<Measurement>, Measurement> result = services.subscribeToMeasurementsByPoints(points);

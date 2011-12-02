@@ -2,6 +2,7 @@ package org.totalgrid.reef.examples.stateoptimizer;
 
 
 import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;

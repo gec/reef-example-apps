@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.points;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.PointService;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
@@ -27,7 +28,7 @@ public class PointsExample {
      * @param client Logged-in Client object
      * @throws ReefServiceException
      */
-    public static void getAllPoints(Client client) throws ReefServiceException {
+    public static void getPoints(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Get All Points ===\n\n");
 
@@ -35,7 +36,7 @@ public class PointsExample {
         PointService service = client.getService(PointService.class);
 
         // Retrieve list of all points
-        List<Point> pointList = service.getAllPoints();
+        List<Point> pointList = service.getPoints();
 
         System.out.println("Found points: " + pointList.size());
 
@@ -70,7 +71,7 @@ public class PointsExample {
         PointService service = client.getService(PointService.class);
 
         // Select a single example point
-        Point examplePoint = service.getAllPoints().get(0);
+        Point examplePoint = service.getPoints().get(0);
 
         // Get the name of the example point
         String name = examplePoint.getName();
@@ -97,7 +98,7 @@ public class PointsExample {
         PointService service = client.getService(PointService.class);
 
         // Select a single example point
-        Point examplePoint = service.getAllPoints().get(0);
+        Point examplePoint = service.getPoints().get(0);
 
         // Get the UUID of the example point
         ReefUUID uuid = examplePoint.getUuid();
@@ -150,7 +151,7 @@ public class PointsExample {
 
             // Run examples...
 
-            getAllPoints(client);
+            getPoints(client);
 
             getPointByName(client);
 

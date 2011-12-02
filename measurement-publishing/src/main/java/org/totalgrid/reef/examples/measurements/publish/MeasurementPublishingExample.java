@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.measurements.publish;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.MeasurementService;
 import org.totalgrid.reef.client.service.PointService;
 import org.totalgrid.reef.client.Client;
@@ -42,7 +43,7 @@ public class MeasurementPublishingExample {
         MeasurementService measurementService = client.getService(MeasurementService.class);
 
         // Select a single point to publish measurements to
-        Point point = pointService.getAllPoints().get(0);
+        Point point = pointService.getPoints().get(0);
 
         System.out.println("Publishing to point: " + point.getName());
 

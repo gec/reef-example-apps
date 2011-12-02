@@ -93,7 +93,7 @@ public class MeasurementState {
     /**
      * @return a copy of the measurement map for more advanced measurement manipulations
      */
-    public Map<String, Measurements.Measurement> getAllMeasurements() {
+    public Map<String, Measurements.Measurement> getMeasurements() {
         return new HashMap<String, Measurements.Measurement>(currentState);
     }
 

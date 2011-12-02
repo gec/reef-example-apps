@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.subscriptions;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.MeasurementService;
 import org.totalgrid.reef.client.service.PointService;
 import org.totalgrid.reef.client.*;
@@ -66,7 +67,7 @@ public class SubscriptionsExample {
         PointService pointService = client.getService(PointService.class);
 
         // Retrieve list of all points in the system
-        List<Point> pointList = pointService.getAllPoints();
+        List<Point> pointList = pointService.getPoints();
 
         // Get service interface for measurements
         MeasurementService measurementService = client.getService(MeasurementService.class);

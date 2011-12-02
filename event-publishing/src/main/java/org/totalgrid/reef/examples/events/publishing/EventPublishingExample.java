@@ -1,7 +1,8 @@
 package org.totalgrid.reef.examples.events.publishing;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
-import org.totalgrid.reef.client.service.EventCreationService;
+import org.totalgrid.reef.client.service.list.ReefServices;
+import org.totalgrid.reef.client.service.EventPublishingService;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
@@ -34,7 +35,7 @@ public class EventPublishingExample {
         System.out.print("\n=== Publish Event ===\n\n");
 
         // Get service interface for publishing events
-        EventCreationService eventCreationService = client.getService(EventCreationService.class);
+        EventPublishingService eventCreationService = client.getService(EventPublishingService.class);
 
         // Set event type to user login
         String eventType = "System.UserLogin";
@@ -74,7 +75,7 @@ public class EventPublishingExample {
         System.out.print("\n=== Publish Event With Arguments ===\n\n");
 
         // Get service interface for publishing events
-        EventCreationService eventCreationService = client.getService(EventCreationService.class);
+        EventPublishingService eventCreationService = client.getService(EventPublishingService.class);
 
         // Set event type to user login
         String eventType = "System.UserLogin";

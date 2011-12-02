@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.measurements;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.MeasurementService;
 import org.totalgrid.reef.client.service.PointService;
 import org.totalgrid.reef.client.Client;
@@ -37,7 +38,7 @@ public class MeasurementsExample {
         PointService pointService = client.getService(PointService.class);
 
         // Select a specific point
-        Point examplePoint = pointService.getAllPoints().get(0);
+        Point examplePoint = pointService.getPoints().get(0);
 
         // Get service interface for measurements
         MeasurementService measurementService = client.getService(MeasurementService.class);
@@ -65,7 +66,7 @@ public class MeasurementsExample {
         PointService pointService = client.getService(PointService.class);
 
         // Select a specific point, get its point name
-        String pointName = pointService.getAllPoints().get(0).getName();
+        String pointName = pointService.getPoints().get(0).getName();
 
         // Get service interface for measurements
         MeasurementService measurementService = client.getService(MeasurementService.class);
@@ -93,7 +94,7 @@ public class MeasurementsExample {
         PointService pointService = client.getService(PointService.class);
 
         // Select four points to get the measurements
-        List<Point> pointList = pointService.getAllPoints().subList(0, 4);
+        List<Point> pointList = pointService.getPoints().subList(0, 4);
 
         // Get service interface for measurements
         MeasurementService measurementService = client.getService(MeasurementService.class);

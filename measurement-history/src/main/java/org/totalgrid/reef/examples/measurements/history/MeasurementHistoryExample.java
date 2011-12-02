@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.measurements.history;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.MeasurementService;
 import org.totalgrid.reef.client.service.PointService;
 import org.totalgrid.reef.client.Client;
@@ -163,7 +164,7 @@ public class MeasurementHistoryExample {
             PointService pointService = client.getService(PointService.class);
 
             // Select a single point to use as an example
-            Point point = pointService.getAllPoints().get(0);
+            Point point = pointService.getPoints().get(0);
 
             getMeasurementHistory(client, point);
 

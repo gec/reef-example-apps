@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.entities;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.EntityService;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
@@ -36,7 +37,7 @@ public class EntitiesExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Retrieve list of all entities in the system
-        List<Entity> entityList = entityService.getAllEntities();
+        List<Entity> entityList = entityService.getEntities();
 
         // Inspect a single Entity object
         Entity first = entityList.get(0);
@@ -75,7 +76,7 @@ public class EntitiesExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Get Entity objects with the type "Breaker"
-        List<Entity> entityList = entityService.getAllEntitiesWithType("Breaker");
+        List<Entity> entityList = entityService.getEntitiesWithType("Breaker");
 
         System.out.println("Entity count: " + entityList.size());
 
@@ -102,7 +103,7 @@ public class EntitiesExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Select an Entity of type "Equipment"
-        Entity equipment = entityService.getAllEntitiesWithType("Equipment").get(0);
+        Entity equipment = entityService.getEntitiesWithType("Equipment").get(0);
 
         System.out.println("Parent: " + equipment.getName() + ", Types: " + equipment.getTypesList());
 
@@ -138,7 +139,7 @@ public class EntitiesExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Select an Entity of type "EquipmentGroup"
-        Entity equipmentGroup = entityService.getAllEntitiesWithType("EquipmentGroup").get(0);
+        Entity equipmentGroup = entityService.getEntitiesWithType("EquipmentGroup").get(0);
 
         ReefUUID equipUuid = equipmentGroup.getUuid();
 
@@ -198,7 +199,7 @@ public class EntitiesExample {
         EntityService entityService = client.getService(EntityService.class);
 
         // Select a single Entity of type "Point"
-        Entity point = entityService.getAllEntitiesWithType("Point").get(0);
+        Entity point = entityService.getEntitiesWithType("Point").get(0);
 
         // Create the root of the abstract search tree, set it to the point entity
         Entity.Builder treeRootBuilder = Entity.newBuilder();
