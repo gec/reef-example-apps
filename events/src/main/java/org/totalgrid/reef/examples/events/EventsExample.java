@@ -1,6 +1,7 @@
 package org.totalgrid.reef.examples.events;
 
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.service.EventService;
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
@@ -46,7 +47,7 @@ public class EventsExample {
         // Display properties of the event
         System.out.println("Event");
         System.out.println("-----------");
-        System.out.println("Uid: " + firstEvent.getUid());
+        System.out.println("Uid: " + firstEvent.getId());
         System.out.println("User: " + firstEvent.getUserId());
         System.out.println("Type: " + firstEvent.getEventType());
         System.out.println("Severity: " + firstEvent.getSeverity());
