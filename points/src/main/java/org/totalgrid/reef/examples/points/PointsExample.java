@@ -104,7 +104,7 @@ public class PointsExample {
         ReefUUID uuid = examplePoint.getUuid();
 
         // Find the point again using the point UUID
-        Point point = service.getPointByUid(uuid);
+        Point point = service.getPointByUuid(uuid);
 
         System.out.println("Found point by UUID: " + point.getName() + ", " + point.getUuid());
     }

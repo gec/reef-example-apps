@@ -49,7 +49,7 @@ public class EventPublishingExample {
         // Display properties of published Event
         System.out.println("Event");
         System.out.println("-----------");
-        System.out.println("Uid: " + published.getUid());
+        System.out.println("Uid: " + published.getId());
         System.out.println("User: " + published.getUserId());
         System.out.println("Type: " + published.getEventType());
         System.out.println("Severity: " + published.getSeverity());
@@ -104,7 +104,7 @@ public class EventPublishingExample {
         // Display properties of published Event, message will include status/reason
         System.out.println("Event");
         System.out.println("-----------");
-        System.out.println("Uid: " + published.getUid());
+        System.out.println("Uid: " + published.getId());
         System.out.println("User: " + published.getUserId());
         System.out.println("Type: " + published.getEventType());
         System.out.println("Severity: " + published.getSeverity());

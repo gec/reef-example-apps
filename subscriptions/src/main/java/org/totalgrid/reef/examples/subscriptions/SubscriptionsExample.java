@@ -9,12 +9,9 @@ import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.proto.Envelope;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.Measurements;
 import org.totalgrid.reef.proto.Measurements.Measurement;
 import org.totalgrid.reef.proto.Model.Point;
-import org.totalgrid.reef.proto.Model.ReefUUID;
 
-import javax.swing.plaf.metal.MetalBorders;
 import java.util.List;
 
 /**
@@ -40,7 +37,7 @@ public class SubscriptionsExample {
         public void onEvent(SubscriptionEvent<Measurement> measurementSubscriptionEvent) {
 
             // Type of the Event (ADDED, MODIFIED, REMOVED)
-            Envelope.Event eventType = measurementSubscriptionEvent.getEventType();
+            Envelope.SubscriptionEventType eventType = measurementSubscriptionEvent.getEventType();
 
             // Measurement associated with the event
             Measurement measurement = measurementSubscriptionEvent.getValue();
