@@ -243,7 +243,7 @@ public class EntitiesExample {
         Entity treeRoot = treeRootBuilder.build();
 
         // Get a result tree from the search tree
-        Entity result = entityService.getEntityTree(treeRoot);
+        Entity result = entityService.searchForEntityTree(treeRoot);
 
         // Display the root node (point entity)
         System.out.println("Root: " + result.getName() + ", Types: " + result.getTypesList());
