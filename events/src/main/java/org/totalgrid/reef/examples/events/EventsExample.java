@@ -119,7 +119,7 @@ public class EventsExample {
         EventSelect eventSelect = builder.build();
 
         // Get events using the EventSelect
-        List<Event> eventList = eventService.getEvents(eventSelect);
+        List<Event> eventList = eventService.searchForEvents(eventSelect);
 
         // Display list of event results
         for (Event event : eventList) {
@@ -162,7 +162,7 @@ public class EventsExample {
         EventSelect eventSelect = builder.build();
 
         // Get events using the EventSelect
-        List<Event> eventList = eventService.getEvents(eventSelect);
+        List<Event> eventList = eventService.searchForEvents(eventSelect);
 
         // Display list of event results
         for (Event event : eventList) {
