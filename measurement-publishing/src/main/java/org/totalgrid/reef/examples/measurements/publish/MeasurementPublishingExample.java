@@ -10,9 +10,9 @@ import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.Measurements;
-import org.totalgrid.reef.proto.Measurements.Measurement;
-import org.totalgrid.reef.proto.Model.Point;
+import org.totalgrid.reef.client.service.proto.Measurements;
+import org.totalgrid.reef.client.service.proto.Measurements.Measurement;
+import org.totalgrid.reef.client.service.proto.Model.Point;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -6,8 +6,8 @@ import org.totalgrid.reef.client.SubscriptionEvent;
 import org.totalgrid.reef.client.SubscriptionEventAcceptor;
 import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.service.AllScadaService;
-import org.totalgrid.reef.proto.Measurements.Measurement;
-import org.totalgrid.reef.proto.Model.Point;
+import org.totalgrid.reef.client.service.proto.Measurements.Measurement;
+import org.totalgrid.reef.client.service.proto.Model.Point;
 
 import java.util.HashMap;
 import java.util.List;

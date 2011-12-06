@@ -4,8 +4,8 @@ package org.totalgrid.reef.examples.stateoptimizer;
 import org.totalgrid.reef.client.exception.ExpectationException;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.service.CommandService;
-import org.totalgrid.reef.proto.Commands;
-import org.totalgrid.reef.proto.Model;
+import org.totalgrid.reef.client.service.proto.Commands;
+import org.totalgrid.reef.client.service.proto.Model;
 
 import java.util.HashMap;
 import java.util.LinkedList;

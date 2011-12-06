@@ -1,6 +1,6 @@
 package org.totalgrid.reef.examples.stateoptimizer;
 
-import org.totalgrid.reef.proto.Measurements;
+import org.totalgrid.reef.client.service.proto.Measurements;
 
 import java.util.HashMap;
 import java.util.Map;

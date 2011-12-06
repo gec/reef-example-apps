@@ -9,10 +9,10 @@ import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.FEP.EndpointConnection;
-import org.totalgrid.reef.proto.FEP.Endpoint;
-import org.totalgrid.reef.proto.Model.ReefUUID;
-import org.totalgrid.reef.proto.Model.ConfigFile;
+import org.totalgrid.reef.client.service.proto.FEP.EndpointConnection;
+import org.totalgrid.reef.client.service.proto.FEP.Endpoint;
+import org.totalgrid.reef.client.service.proto.Model.ReefUUID;
+import org.totalgrid.reef.client.service.proto.Model.ConfigFile;
 
 import java.util.List;
 

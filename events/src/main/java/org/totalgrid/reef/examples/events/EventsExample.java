@@ -9,8 +9,8 @@ import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.Events.EventSelect;
-import org.totalgrid.reef.proto.Events.Event;
+import org.totalgrid.reef.client.service.proto.Events.EventSelect;
+import org.totalgrid.reef.client.service.proto.Events.Event;
 
 import java.util.ArrayList;
 import java.util.Date;

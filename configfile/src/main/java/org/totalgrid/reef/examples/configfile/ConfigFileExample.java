@@ -10,8 +10,8 @@ import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.proto.Model.ConfigFile;
-import org.totalgrid.reef.proto.Model.Entity;
+import org.totalgrid.reef.client.service.proto.Model.ConfigFile;
+import org.totalgrid.reef.client.service.proto.Model.Entity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
