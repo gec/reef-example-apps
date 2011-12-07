@@ -4,7 +4,7 @@
     <artifactId>configfile</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.0-RC5-SNAPSHOT</version>
+    <version>0.4.0</version>
 
     <build>
         <plugins>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-service-client</artifactId>
-            <version>0.4.0-RC5-SNAPSHOT</version>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
     <repositories>
