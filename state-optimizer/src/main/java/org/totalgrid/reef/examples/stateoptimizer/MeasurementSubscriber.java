@@ -1,0 +1,58 @@
+package org.totalgrid.reef.examples.stateoptimizer;
+
+
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.SubscriptionEvent;
+import org.totalgrid.reef.client.SubscriptionEventAcceptor;
+import org.totalgrid.reef.client.SubscriptionResult;
+import org.totalgrid.reef.client.service.AllScadaService;
+import org.totalgrid.reef.client.service.proto.Measurements.Measurement;
+import org.totalgrid.reef.client.service.proto.Model.Point;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * subscribes to all measurements in the system, keeps last value of each measurement
+ */
+public class MeasurementSubscriber implements SubscriptionEventAcceptor<Measurement> {
+
+    private Map<String, Measurement> measurementState = new HashMap<String, Measurement>();
+
+    public MeasurementSubscriber(AllScadaService services) throws ReefServiceException {
+
+        // get list of all points in system
+        List<Point> points = services.getPoints();
+        // TODO: filter points to only ones we plan on looking at
+
+        SubscriptionResult<List<Measurement>, Measurement> result = services.subscribeToMeasurementsByPoints(points);
+
+        for (Measurement m : result.getResult()) {
+            updateMeasurement(m);
+        }
+        result.getSubscription().start(this);
+    }
+
+    @Override
+    public void onEvent(SubscriptionEvent<Measurement> event) {
+        // subscription updates come in from another thread here
+        synchronized (this) {
+            updateMeasurement(event.getValue());
+        }
+    }
+
+    private void updateMeasurement(Measurement updatedMeasurement) {
+        // replace the current value with the most recently received measurement
+        measurementState.put(updatedMeasurement.getName(), updatedMeasurement);
+    }
+
+    /**
+     * @return copy of the measurement state
+     */
+    public Map<String, Measurement> getCurrentState() {
+        synchronized (this) {
+            return new HashMap<String, Measurement>(measurementState);
+        }
+    }
+}
