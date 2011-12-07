@@ -84,7 +84,7 @@ public class ApplicationsExample {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, ReefServices.getInstance());
+        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, new ReefServices());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
