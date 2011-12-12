@@ -4,7 +4,7 @@
     <artifactId>subscriptions</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
 
     <build>
         <plugins>
