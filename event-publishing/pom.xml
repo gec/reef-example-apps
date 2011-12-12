@@ -4,7 +4,7 @@
     <artifactId>event-publishing</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.4.0</version>
 
     <build>
         <plugins>
