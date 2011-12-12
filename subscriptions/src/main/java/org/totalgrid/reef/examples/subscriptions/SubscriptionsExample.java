@@ -96,6 +96,9 @@ public class SubscriptionsExample {
 
         // Receive new measurements for fifteen seconds
         Thread.sleep(15 * 1000);
+
+        // Cancel subscription to clean up resources in broker
+        subscription.cancel();
     }
 
 

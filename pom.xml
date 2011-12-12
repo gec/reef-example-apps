@@ -24,6 +24,8 @@
 		<module>configfile</module>
 		<module>applications</module>
 		<module>subscriptions</module>
+
+        <module>assembly</module>
 	</modules>
 
 </project>
