@@ -56,9 +56,9 @@ public class CommandIssuer {
         // lock all commands in the system
         Commands.CommandLock select = commandService.createCommandExecutionLock(new LinkedList<Model.Command>(commandsToLock.values()));
         try {
-            Commands.CommandStatus result = commandService.executeCommandAsControl(cmd);
-            System.out.println("Executed command: " + commandName + " result: " + result);
-            if (result != Commands.CommandStatus.SUCCESS) {
+            Commands.CommandResult result = commandService.executeCommandAsControl(cmd);
+            System.out.println("Executed command: " + commandName + " result: " + result.getStatus() + " message: " + result.getErrorMessage());
+            if (result.getStatus() != Commands.CommandStatus.SUCCESS) {
                 throw new ExpectationException("Command: " + commandName + " didn't result in SUCCESS. ( " + result + ")");
             }
         } finally {
