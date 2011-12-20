@@ -7,6 +7,7 @@ import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.proto.Commands;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.client.service.proto.Commands.UserCommandRequest;
@@ -239,9 +240,9 @@ public class CommandsExample {
 
         // Execute the control. The CommandStatus enumeration describes the result of the
         // execution ("SUCCESS" if successful)
-        CommandStatus commandStatus = commandService.executeCommandAsControl(control);
+        Commands.CommandResult commandResult = commandService.executeCommandAsControl(control);
 
-        System.out.println("Command result: " + commandStatus);
+        System.out.println("Command result: " + commandResult.getStatus());
 
         // Remove the command lock from the system, cleaning up
         commandService.deleteCommandLock(commandLock);
@@ -300,9 +301,9 @@ public class CommandsExample {
 
         // Execute the control. The CommandStatus enumeration describes the result of the
         // execution ("SUCCESS" if successful)
-        CommandStatus commandStatus = commandService.executeCommandAsSetpoint(setpoint, 35.323);
+        Commands.CommandResult commandResult = commandService.executeCommandAsSetpoint(setpoint, 35.323);
 
-        System.out.println("Command result: " + commandStatus);
+        System.out.println("Command result: " + commandResult.getStatus());
 
         // Remove the command lock from the system, cleaning up
         commandService.deleteCommandLock(commandLock);
