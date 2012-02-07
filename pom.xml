@@ -9,22 +9,22 @@
 	<version>0.4.3</version>
 
 	<modules>
-        <module>web-app</module>
-		<module>state-optimizer</module>
-		<module>login</module>
-		<module>points</module>
-		<module>measurements</module>
-		<module>measurement-history</module>
-		<module>measurement-publishing</module>
-		<module>commands</module>
-		<module>events</module>
-		<module>event-publishing</module>
-		<module>alarms</module>
-		<module>entities</module>
-		<module>endpoints</module>
-		<module>configfile</module>
-		<module>applications</module>
-		<module>subscriptions</module>
+        <module>apps/web-app</module>
+		<module>apps/state-optimizer</module>
+		<module>services/login</module>
+		<module>services/points</module>
+		<module>services/measurements</module>
+		<module>services/measurement-history</module>
+		<module>services/measurement-publishing</module>
+		<module>services/commands</module>
+		<module>services/events</module>
+		<module>services/event-publishing</module>
+		<module>services/alarms</module>
+		<module>services/entities</module>
+		<module>services/endpoints</module>
+		<module>services/configfile</module>
+		<module>services/applications</module>
+		<module>services/subscriptions</module>
 
         <module>assembly</module>
 	</modules>
