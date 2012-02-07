@@ -9,6 +9,7 @@
 	<version>0.4.3</version>
 
 	<modules>
+        <module>web-app</module>
 		<module>state-optimizer</module>
 		<module>login</module>
 		<module>points</module>
