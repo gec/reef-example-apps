@@ -6,7 +6,7 @@
 
     <groupId>org.totalgrid.reef.examples</groupId>
     <artifactId>reef-example-apps</artifactId>
-    <version>0.4.1</version>
+    <version>0.4.3</version>
     <packaging>pom</packaging>
 
     <properties>

@@ -156,7 +156,7 @@ public class EntitiesExample {
             System.out.println("+ Relationship: " + relationship.getRelationship() + ", Descendant: " + relationship.getDescendantOf() + ", Distance: " + relationship.getDistance());
 
             // Display (first 3) entities of at depth 1
-            for (Entity entity : relationship.getEntitiesList().subList(0, 3)) {
+            for (Entity entity : relationship.getEntitiesList().subList(0, 2)) {
                 System.out.println("  + Children: " + entity.getName() + ", Types: " + entity.getTypesList());
 
                 // Display relationships at depth 2
@@ -164,7 +164,7 @@ public class EntitiesExample {
                     System.out.println("    + Relationship: " + rel2.getRelationship() + ", Descendant: " + rel2.getDescendantOf() + ", Distance: " + rel2.getDistance());
 
                     // Display entities at depth 2
-                    for (Entity entity2: rel2.getEntitiesList().subList(0, 3)) {
+                    for (Entity entity2: rel2.getEntitiesList().subList(0, 2)) {
                         System.out.println("      + Children: " + entity2.getName() + ", Types: " + entity2.getTypesList());
                     }
                     System.out.println("        ...");
