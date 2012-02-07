@@ -4,7 +4,7 @@
     <artifactId>measurement-publishing</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.3</version>
+    <version>0.4.4-SNAPSHOT</version>
 
     <build>
         <plugins>
