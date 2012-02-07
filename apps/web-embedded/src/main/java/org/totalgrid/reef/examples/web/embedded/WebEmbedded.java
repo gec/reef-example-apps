@@ -1,4 +1,4 @@
-package org.totalgrid.reef.examples.webapp;
+package org.totalgrid.reef.examples.web.embedded;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
@@ -23,11 +23,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-public class WebApp extends AbstractHandler {
+public class WebEmbedded extends AbstractHandler {
 
     private final Client client;
 
-    public WebApp(Client client) {
+    public WebEmbedded(Client client) {
         this.client = client;
     }
     
@@ -101,7 +101,7 @@ public class WebApp extends AbstractHandler {
 
             // Application code here...
             Server server = new Server(8080);
-            server.setHandler(new WebApp(client));
+            server.setHandler(new WebEmbedded(client));
 
             System.out.println("Starting Jetty web server...");
             server.start();
