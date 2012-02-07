@@ -32,8 +32,8 @@
             <directory>${project.basedir}/../</directory>
             <outputDirectory>./</outputDirectory>
             <includes>
-                <include>**/pom.xml</include>
-                <include>**/src/**</include>
+                <include>**/**/pom.xml</include>
+                <include>**/**/src/**</include>
             </includes>
             <excludes>
                 <exclude>.gitignore</exclude>
