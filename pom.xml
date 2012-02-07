@@ -9,6 +9,7 @@
 	<version>0.4.3</version>
 
 	<modules>
+        <module>apps/web-war</module>
         <module>apps/web-embedded</module>
 		<module>apps/state-optimizer</module>
 		<module>services/login</module>
