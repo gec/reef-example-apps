@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
-            <artifactId>reef-service-client</artifactId>
+            <artifactId>reef-client</artifactId>
             <version>0.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
