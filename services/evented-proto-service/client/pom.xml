@@ -1,10 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>basic-proto-service-impl</artifactId>
+    <artifactId>evented-proto-service-client</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
     <version>0.4.5-SNAPSHOT</version>
+
+    <properties>
+        <maven-protoc-plugin.version>0.1.9-GEC</maven-protoc-plugin.version>
+    </properties>
 
     <build>
         <plugins>
@@ -17,23 +21,30 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.protobuf.tools</groupId>
+                <artifactId>maven-protoc-plugin</artifactId>
+                <version>${maven-protoc-plugin.version}</version>
+                <configuration>
+                    <protoSourceRoot>src/main/proto</protoSourceRoot>
+                    <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <dependencies>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
-            <artifactId>reef-client</artifactId>
-            <version>0.4.5-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-service-client</artifactId>
-            <version>0.4.5-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.totalgrid.reef.examples</groupId>
-            <artifactId>basic-proto-service-client</artifactId>
             <version>0.4.5-SNAPSHOT</version>
         </dependency>
 

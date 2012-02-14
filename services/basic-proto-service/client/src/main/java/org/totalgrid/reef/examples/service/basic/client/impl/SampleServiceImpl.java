@@ -8,7 +8,7 @@ import org.totalgrid.reef.examples.service.basic.client.proto.Sample;
 
 public class SampleServiceImpl implements SampleService {
     
-    Client client;
+    private final Client client;
     
     public SampleServiceImpl(Client client) {
         this.client = client;

@@ -1,25 +1,24 @@
-package org.totalgrid.reef.examples.service.basic.service.entry;
+package org.totalgrid.reef.examples.service.event.client.entry;
 
-import org.totalgrid.reef.client.AnyNodeDestination;
+
 import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
-import org.totalgrid.reef.client.registration.ServiceRegistration;
 import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.examples.service.basic.client.SampleMessageDescriptor;
-import org.totalgrid.reef.examples.service.basic.client.SampleServiceList;
-import org.totalgrid.reef.examples.service.basic.service.SampleService;
+import org.totalgrid.reef.examples.service.event.client.RestService;
+import org.totalgrid.reef.examples.service.event.client.RestServiceList;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
 
-public class SampleServiceEntry {
-    private SampleServiceEntry() {}
+public class RestServiceClientEntry {
 
+    private RestServiceClientEntry() {}
 
     public static void main(String[] args) throws Exception {
-        
+
         // Parse command line arguments
         if (args.length < 2) {
             System.out.println("Usage: <broker settings> <user settings>");
@@ -46,15 +45,17 @@ public class SampleServiceEntry {
             // Connect to the Reef server, may fail if can't connect
             connection = connectionFactory.connect();
 
-            connection.addServicesList(new SampleServiceList());
+            // Add Sample service to connection list
+            connection.addServicesList(new RestServiceList());
 
-            ServiceRegistration registration = connection.getServiceRegistration();
+            // Login with the user credentials
+            Client client = connection.login(user);
 
-            registration.bindService(new SampleService(), new SampleMessageDescriptor(), new AnyNodeDestination(), true);
-            
-            System.out.println("Service registered. Press any key to exit...");
-            
-            System.in.read();
+            RestService restService = client.getService(RestService.class);
+
+            RestEvented.RestMessage response = restService.putMessage("testKey", "testValue");
+
+            System.out.println(response);
 
         } catch(ReefServiceException rse) {
 
@@ -77,5 +78,4 @@ public class SampleServiceEntry {
 
         System.exit(result);
     }
-
 }

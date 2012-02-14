@@ -1,0 +1,11 @@
+package org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
+
+
+option java_package = "org.totalgrid.reef.examples.service.event.client.proto";
+option java_outer_classname = "RestEvented";
+
+
+message RestMessage {
+  optional string key = 1;
+  optional string value = 2;
+}

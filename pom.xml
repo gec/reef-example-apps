@@ -27,6 +27,7 @@
 		<module>client-api/applications</module>
 		<module>client-api/subscriptions</module>
         <module>services/basic-proto-service</module>
+        <module>services/evented-proto-service</module>
 
         <module>assembly</module>
 	</modules>

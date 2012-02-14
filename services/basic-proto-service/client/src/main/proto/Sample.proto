@@ -1,4 +1,4 @@
-package org.totalgrid.reef.examples.service.basic.client.proto.Metrics;
+package org.totalgrid.reef.examples.service.basic.client.proto.Sample;
 
 
 option java_package = "org.totalgrid.reef.examples.service.basic.client.proto";
