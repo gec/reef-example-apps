@@ -4,46 +4,45 @@ import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.service.ClientOperations;
-import org.totalgrid.reef.examples.service.event.client.RestService;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
+import org.totalgrid.reef.examples.service.event.client.KeyValueService;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
 
 import java.util.List;
 
-public class RestServiceImpl implements RestService {
+public class KeyValueServiceImpl implements KeyValueService {
 
     private final Client client;
 
-    public RestServiceImpl(Client client) {
+    public KeyValueServiceImpl(Client client) {
         this.client = client;
     }
 
     @Override
-    public RestMessage getMessage(String key) throws ReefServiceException {
+    public KeyValue getMessage(String key) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey(key).build();
+        KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
         return operations.getOne(request);
     }
 
     @Override
-    public List<RestMessage> getAllMessages() throws ReefServiceException {
+    public List<KeyValue> getAllMessages() throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey("*").build();
+        KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
         return operations.getMany(request);
     }
 
     @Override
-    public RestMessage putMessage(String key, String value) throws ReefServiceException {
+    public KeyValue putMessage(String key, String value) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey(key).setValue(value).build();
+        KeyValue request = KeyValue.newBuilder().setKey(key).setValue(value).build();
 
         return operations.putOne(request);
     }
@@ -53,7 +52,7 @@ public class RestServiceImpl implements RestService {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey(key).build();
+        KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
         operations.deleteOne(request);
     }
@@ -63,27 +62,27 @@ public class RestServiceImpl implements RestService {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey("*").build();
+        KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
         operations.deleteMany(request);
     }
 
     @Override
-    public SubscriptionResult<List<RestMessage>, RestMessage> subscribeToAllRestMessages() throws ReefServiceException {
+    public SubscriptionResult<List<KeyValue>, KeyValue> subscribeToAllKeyValues() throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey("*").build();
+        KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
         return operations.subscribeMany(request);
     }
 
     @Override
-    public SubscriptionResult<List<RestMessage>, RestMessage> subscribeToRestMessages(String key) throws ReefServiceException {
+    public SubscriptionResult<List<KeyValue>, KeyValue> subscribeToKeyValues(String key) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
-        RestMessage request = RestMessage.newBuilder().setKey(key).build();
+        KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
         return operations.subscribeMany(request);
     }

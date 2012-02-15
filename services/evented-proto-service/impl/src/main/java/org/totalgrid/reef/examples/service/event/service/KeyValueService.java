@@ -5,24 +5,24 @@ import org.totalgrid.reef.client.proto.Envelope;
 import org.totalgrid.reef.client.registration.EventPublisher;
 import org.totalgrid.reef.client.registration.Service;
 import org.totalgrid.reef.client.registration.ServiceResponseCallback;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class RestMessageService implements Service {
+public class KeyValueService implements Service {
 
     private final ConcurrentMap<String, String> map = new ConcurrentHashMap<String, String>();
 
     private final EventPublisher publisher;
 
-    public RestMessageService(EventPublisher publisher) {
+    public KeyValueService(EventPublisher publisher) {
         this.publisher = publisher;
     }
 
-    private void doGet(RestMessage restMessage, String id, ServiceResponseCallback callback) {
+    private void doGet(KeyValue restMessage, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
@@ -34,7 +34,7 @@ public class RestMessageService implements Service {
         } else if (restMessage.getKey().equals("*")) {
             
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                RestMessage msg = RestMessage.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
                 b.addPayload(msg.toByteString());
             }
             b.setStatus(Envelope.Status.OK);
@@ -44,7 +44,7 @@ public class RestMessageService implements Service {
             String value = map.get(restMessage.getKey());
 
             if (value != null) {
-                RestMessage msg = RestMessage.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
                 b.addPayload(msg.toByteString());
             }
             b.setStatus(Envelope.Status.OK);
@@ -53,7 +53,7 @@ public class RestMessageService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doPut(RestMessage restMessage, String id, ServiceResponseCallback callback) {
+    private void doPut(KeyValue restMessage, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
@@ -64,7 +64,7 @@ public class RestMessageService implements Service {
 
             String previous = map.put(restMessage.getKey(), restMessage.getValue());
             
-            RestMessage msg = RestMessage.newBuilder().setKey(restMessage.getKey()).setValue(restMessage.getValue()).build();
+            KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(restMessage.getValue()).build();
 
             b.addPayload(msg.toByteString());
 
@@ -81,7 +81,7 @@ public class RestMessageService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doPost(RestMessage restMessage, String id, ServiceResponseCallback callback) {
+    private void doPost(KeyValue restMessage, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
         b.setStatus(Envelope.Status.BAD_REQUEST);
@@ -89,7 +89,7 @@ public class RestMessageService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doDelete(RestMessage restMessage, String id, ServiceResponseCallback callback) {
+    private void doDelete(KeyValue restMessage, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
@@ -101,7 +101,7 @@ public class RestMessageService implements Service {
         } else if (restMessage.getKey().equals("*")) {
 
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                RestMessage msg = RestMessage.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
                 b.addPayload(msg.toByteString());
                 publisher.publishEvent(Envelope.SubscriptionEventType.REMOVED, msg, msg.getKey());
             }
@@ -112,7 +112,7 @@ public class RestMessageService implements Service {
             String value = map.remove(restMessage.getKey());
 
             if (value != null) {
-                RestMessage msg = RestMessage.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
                 b.addPayload(msg.toByteString());
                 b.setStatus(Envelope.Status.DELETED);
                 publisher.publishEvent(Envelope.SubscriptionEventType.REMOVED, msg, msg.getKey());
@@ -127,7 +127,7 @@ public class RestMessageService implements Service {
     }
 
 
-    private void handleSubscription(RestMessage message, Map<String, List<String>> headers) {
+    private void handleSubscription(KeyValue message, Map<String, List<String>> headers) {
 
         List<String> queueList = headers.get("SUB_QUEUE_NAME");
         if (queueList == null || queueList.size() < 1) {
@@ -136,14 +136,14 @@ public class RestMessageService implements Service {
         
         String subQueue = queueList.get(0);
 
-        publisher.bindQueueByClass(subQueue, "*", RestMessage.class);
+        publisher.bindQueueByClass(subQueue, "*", KeyValue.class);
     }
 
     @Override
     public void respond(Envelope.ServiceRequest request, Map<String, List<String>> headers, ServiceResponseCallback callback) {
 
         try {
-            RestMessage message = RestMessage.parseFrom(request.getPayload());
+            KeyValue message = KeyValue.parseFrom(request.getPayload());
 
             handleSubscription(message, headers);
 

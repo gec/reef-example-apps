@@ -10,12 +10,12 @@ import org.totalgrid.reef.client.registration.ServiceRegistration;
 import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.examples.service.event.client.RestMessageDescriptor;
-import org.totalgrid.reef.examples.service.event.client.RestServiceList;
-import org.totalgrid.reef.examples.service.event.service.RestMessageService;
+import org.totalgrid.reef.examples.service.event.client.KeyValueDescriptor;
+import org.totalgrid.reef.examples.service.event.client.KeyValueServiceList;
+import org.totalgrid.reef.examples.service.event.service.KeyValueService;
 
-public class RestMessageServiceEntry {
-    private RestMessageServiceEntry() {}
+public class KeyValueServiceEntry {
+    private KeyValueServiceEntry() {}
 
 
     public static void main(String[] args) throws Exception {
@@ -46,13 +46,13 @@ public class RestMessageServiceEntry {
             // Connect to the Reef server, may fail if can't connect
             connection = connectionFactory.connect();
 
-            connection.addServicesList(new RestServiceList());
+            connection.addServicesList(new KeyValueServiceList());
 
             ServiceRegistration registration = connection.getServiceRegistration();
 
             EventPublisher eventPublisher = registration.getEventPublisher();
 
-            registration.bindService(new RestMessageService(eventPublisher), new RestMessageDescriptor(), new AnyNodeDestination(), true);
+            registration.bindService(new KeyValueService(eventPublisher), new KeyValueDescriptor(), new AnyNodeDestination(), true);
 
             System.out.println("Service registered. Press any key to exit...");
 

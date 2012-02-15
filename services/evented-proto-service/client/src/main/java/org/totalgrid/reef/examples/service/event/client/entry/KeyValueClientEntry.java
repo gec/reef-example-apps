@@ -7,46 +7,46 @@ import org.totalgrid.reef.client.factory.ReefConnectionFactory;
 import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
-import org.totalgrid.reef.examples.service.event.client.RestService;
-import org.totalgrid.reef.examples.service.event.client.RestServiceList;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
+import org.totalgrid.reef.examples.service.event.client.KeyValueService;
+import org.totalgrid.reef.examples.service.event.client.KeyValueServiceList;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
 
 import java.util.List;
 
-public class RestServiceClientEntry {
+public class KeyValueClientEntry {
 
-    private RestServiceClientEntry() {}
+    private KeyValueClientEntry() {}
 
 
     
     public static void subscribe(Client client) throws ReefServiceException {
 
-        RestService restService = client.getService(RestService.class);
+        KeyValueService keyValueService = client.getService(KeyValueService.class);
 
-        SubscriptionResult<List<RestMessage>, RestMessage> subResult = restService.subscribeToAllRestMessages();
+        SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToAllKeyValues();
         
         System.out.println("-- Immediate results of subscription: " + subResult.getResult());
 
-        subResult.getSubscription().start(new MessageEventAcceptor());
+        subResult.getSubscription().start(new PrintingEventAcceptor());
     }
 
     public static void showLifecycle(Client client) throws ReefServiceException {
 
-        RestService restService = client.getService(RestService.class);
+        KeyValueService keyValueService = client.getService(KeyValueService.class);
 
-        RestMessage addResponse = restService.putMessage("testKey", "testValue");
+        KeyValue addResponse = keyValueService.putMessage("testKey", "testValue");
 
         System.out.println("-- Added rest message: " + addResponse);
 
-        RestMessage modifyResponse = restService.putMessage("testKey", "secondValue");
+        KeyValue modifyResponse = keyValueService.putMessage("testKey", "secondValue");
 
         System.out.println("-- Modify rest message: " + modifyResponse);
 
-        System.out.println("-- Current message store, pre-delete: " + restService.getAllMessages());
+        System.out.println("-- Current message store, pre-delete: " + keyValueService.getAllMessages());
 
-        restService.deleteMessage("testKey");
+        keyValueService.deleteMessage("testKey");
 
-        System.out.println("-- Current message store, post-delete: " + restService.getAllMessages());
+        System.out.println("-- Current message store, post-delete: " + keyValueService.getAllMessages());
     }
 
     public static void main(String[] args) throws Exception {
@@ -78,7 +78,7 @@ public class RestServiceClientEntry {
             connection = connectionFactory.connect();
 
             // Add Sample service to connection list
-            connection.addServicesList(new RestServiceList());
+            connection.addServicesList(new KeyValueServiceList());
 
             // Login with the user credentials
             Client client = connection.login(user);
@@ -112,10 +112,10 @@ public class RestServiceClientEntry {
     }
 
 
-    public static class MessageEventAcceptor implements SubscriptionEventAcceptor<RestMessage> {
+    public static class PrintingEventAcceptor implements SubscriptionEventAcceptor<KeyValue> {
 
         @Override
-        public void onEvent(SubscriptionEvent<RestMessage> subscriptionEvent) {
+        public void onEvent(SubscriptionEvent<KeyValue> subscriptionEvent) {
             System.out.println("-- Got subscription event: " + subscriptionEvent);
         }
     }
