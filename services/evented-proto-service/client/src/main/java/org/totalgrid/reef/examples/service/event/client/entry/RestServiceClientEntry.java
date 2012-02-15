@@ -1,9 +1,7 @@
 package org.totalgrid.reef.examples.service.event.client.entry;
 
 
-import org.totalgrid.reef.client.Client;
-import org.totalgrid.reef.client.Connection;
-import org.totalgrid.reef.client.ConnectionFactory;
+import org.totalgrid.reef.client.*;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
 import org.totalgrid.reef.client.service.list.ReefServices;
@@ -11,11 +9,45 @@ import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.examples.service.event.client.RestService;
 import org.totalgrid.reef.examples.service.event.client.RestServiceList;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
+
+import java.util.List;
 
 public class RestServiceClientEntry {
 
     private RestServiceClientEntry() {}
+
+
+    
+    public static void subscribe(Client client) throws ReefServiceException {
+
+        RestService restService = client.getService(RestService.class);
+
+        SubscriptionResult<List<RestMessage>, RestMessage> subResult = restService.subscribeToAllRestMessages();
+        
+        System.out.println("-- Immediate results of subscription: " + subResult.getResult());
+
+        subResult.getSubscription().start(new MessageEventAcceptor());
+    }
+
+    public static void showLifecycle(Client client) throws ReefServiceException {
+
+        RestService restService = client.getService(RestService.class);
+
+        RestMessage addResponse = restService.putMessage("testKey", "testValue");
+
+        System.out.println("-- Added rest message: " + addResponse);
+
+        RestMessage modifyResponse = restService.putMessage("testKey", "secondValue");
+
+        System.out.println("-- Modify rest message: " + modifyResponse);
+
+        System.out.println("-- Current message store, pre-delete: " + restService.getAllMessages());
+
+        restService.deleteMessage("testKey");
+
+        System.out.println("-- Current message store, post-delete: " + restService.getAllMessages());
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -51,11 +83,11 @@ public class RestServiceClientEntry {
             // Login with the user credentials
             Client client = connection.login(user);
 
-            RestService restService = client.getService(RestService.class);
+            subscribe(client);
 
-            RestEvented.RestMessage response = restService.putMessage("testKey", "testValue");
-
-            System.out.println(response);
+            showLifecycle(client);
+            
+            System.in.read();
 
         } catch(ReefServiceException rse) {
 
@@ -77,5 +109,14 @@ public class RestServiceClientEntry {
         }
 
         System.exit(result);
+    }
+
+
+    public static class MessageEventAcceptor implements SubscriptionEventAcceptor<RestMessage> {
+
+        @Override
+        public void onEvent(SubscriptionEvent<RestMessage> subscriptionEvent) {
+            System.out.println("-- Got subscription event: " + subscriptionEvent);
+        }
     }
 }

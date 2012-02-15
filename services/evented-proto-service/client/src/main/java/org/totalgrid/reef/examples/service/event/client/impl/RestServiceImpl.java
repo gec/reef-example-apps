@@ -1,9 +1,11 @@
 package org.totalgrid.reef.examples.service.event.client.impl;
 
 import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.service.ClientOperations;
 import org.totalgrid.reef.examples.service.event.client.RestService;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
 import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
 
 import java.util.List;
@@ -64,5 +66,25 @@ public class RestServiceImpl implements RestService {
         RestMessage request = RestMessage.newBuilder().setKey("*").build();
 
         operations.deleteMany(request);
+    }
+
+    @Override
+    public SubscriptionResult<List<RestMessage>, RestMessage> subscribeToAllRestMessages() throws ReefServiceException {
+
+        ClientOperations operations = client.getService(ClientOperations.class);
+
+        RestMessage request = RestMessage.newBuilder().setKey("*").build();
+
+        return operations.subscribeMany(request);
+    }
+
+    @Override
+    public SubscriptionResult<List<RestMessage>, RestMessage> subscribeToRestMessages(String key) throws ReefServiceException {
+
+        ClientOperations operations = client.getService(ClientOperations.class);
+
+        RestMessage request = RestMessage.newBuilder().setKey(key).build();
+
+        return operations.subscribeMany(request);
     }
 }

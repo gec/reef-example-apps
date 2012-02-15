@@ -5,6 +5,7 @@ import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.client.factory.ReefConnectionFactory;
+import org.totalgrid.reef.client.registration.EventPublisher;
 import org.totalgrid.reef.client.registration.ServiceRegistration;
 import org.totalgrid.reef.client.service.list.ReefServices;
 import org.totalgrid.reef.client.settings.AmqpSettings;
@@ -49,7 +50,9 @@ public class RestMessageServiceEntry {
 
             ServiceRegistration registration = connection.getServiceRegistration();
 
-            registration.bindService(new RestMessageService(), new RestMessageDescriptor(), new AnyNodeDestination(), true);
+            EventPublisher eventPublisher = registration.getEventPublisher();
+
+            registration.bindService(new RestMessageService(eventPublisher), new RestMessageDescriptor(), new AnyNodeDestination(), true);
 
             System.out.println("Service registered. Press any key to exit...");
 

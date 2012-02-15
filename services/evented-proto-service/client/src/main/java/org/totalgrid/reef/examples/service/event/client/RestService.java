@@ -1,5 +1,6 @@
 package org.totalgrid.reef.examples.service.event.client;
 
+import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.RestMessage;
 
@@ -16,5 +17,9 @@ public interface RestService {
     void deleteMessage(String key) throws ReefServiceException;
 
     void deleteAllMessages() throws ReefServiceException;
+    
+    SubscriptionResult<List<RestMessage>, RestMessage> subscribeToAllRestMessages() throws ReefServiceException;
+    
+    SubscriptionResult<List<RestMessage>, RestMessage> subscribeToRestMessages(String key) throws ReefServiceException;
 
 }
