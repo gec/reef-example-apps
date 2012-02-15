@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * a
+ */
 public class KeyValueService implements Service {
 
     private final ConcurrentMap<String, String> map = new ConcurrentHashMap<String, String>();
@@ -22,16 +25,22 @@ public class KeyValueService implements Service {
         this.publisher = publisher;
     }
 
-    private void doGet(KeyValue restMessage, String id, ServiceResponseCallback callback) {
+    /**
+     *
+     * @param message
+     * @param id
+     * @param callback
+     */
+    private void doGet(KeyValue message, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
-        if (!restMessage.hasKey()) {
+        if (!message.hasKey()) {
 
             b.setStatus(Envelope.Status.BAD_REQUEST);
             b.setErrorMessage("Must include key in get request");
 
-        } else if (restMessage.getKey().equals("*")) {
+        } else if (message.getKey().equals("*")) {
             
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 KeyValue msg = KeyValue.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
@@ -41,10 +50,10 @@ public class KeyValueService implements Service {
 
         } else {
 
-            String value = map.get(restMessage.getKey());
+            String value = map.get(message.getKey());
 
             if (value != null) {
-                KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(message.getKey()).setValue(value).build();
                 b.addPayload(msg.toByteString());
             }
             b.setStatus(Envelope.Status.OK);
@@ -53,18 +62,18 @@ public class KeyValueService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doPut(KeyValue restMessage, String id, ServiceResponseCallback callback) {
+    private void doPut(KeyValue message, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
-        if (!restMessage.hasKey() || !restMessage.hasValue()) {
+        if (!message.hasKey() || !message.hasValue()) {
             b.setStatus(Envelope.Status.BAD_REQUEST);
             b.setErrorMessage("Must include key and value in put request");
         } else {
 
-            String previous = map.put(restMessage.getKey(), restMessage.getValue());
+            String previous = map.put(message.getKey(), message.getValue());
             
-            KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(restMessage.getValue()).build();
+            KeyValue msg = KeyValue.newBuilder().setKey(message.getKey()).setValue(message.getValue()).build();
 
             b.addPayload(msg.toByteString());
 
@@ -81,7 +90,7 @@ public class KeyValueService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doPost(KeyValue restMessage, String id, ServiceResponseCallback callback) {
+    private void doPost(KeyValue message, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
         b.setStatus(Envelope.Status.BAD_REQUEST);
@@ -89,16 +98,16 @@ public class KeyValueService implements Service {
         callback.onResponse(b.build());
     }
 
-    private void doDelete(KeyValue restMessage, String id, ServiceResponseCallback callback) {
+    private void doDelete(KeyValue message, String id, ServiceResponseCallback callback) {
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
         b.setId(id);
 
-        if (!restMessage.hasKey()) {
+        if (!message.hasKey()) {
 
             b.setStatus(Envelope.Status.BAD_REQUEST);
             b.setErrorMessage("Must include key in delete request");
 
-        } else if (restMessage.getKey().equals("*")) {
+        } else if (message.getKey().equals("*")) {
 
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 KeyValue msg = KeyValue.newBuilder().setKey(entry.getKey()).setValue(entry.getValue()).build();
@@ -109,10 +118,10 @@ public class KeyValueService implements Service {
             map.clear();
 
         } else {
-            String value = map.remove(restMessage.getKey());
+            String value = map.remove(message.getKey());
 
             if (value != null) {
-                KeyValue msg = KeyValue.newBuilder().setKey(restMessage.getKey()).setValue(value).build();
+                KeyValue msg = KeyValue.newBuilder().setKey(message.getKey()).setValue(value).build();
                 b.addPayload(msg.toByteString());
                 b.setStatus(Envelope.Status.DELETED);
                 publisher.publishEvent(Envelope.SubscriptionEventType.REMOVED, msg, msg.getKey());
