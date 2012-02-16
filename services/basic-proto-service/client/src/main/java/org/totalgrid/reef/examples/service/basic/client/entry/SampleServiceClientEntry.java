@@ -53,8 +53,10 @@ public class SampleServiceClientEntry {
             // Login with the user credentials
             Client client = connection.login(user);
 
+            // Get SampleService interface from logged-in client
             SampleService sampleService = client.getService(SampleService.class);
 
+            // Demonstrate making a service request using the service interface
             Sample.SampleMessage response = sampleService.sendRequest(Sample.SampleMessage.newBuilder().setContent("request").build());
             
             System.out.println(response);

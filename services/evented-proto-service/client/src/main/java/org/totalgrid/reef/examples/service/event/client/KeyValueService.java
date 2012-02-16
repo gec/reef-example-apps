@@ -18,7 +18,7 @@ public interface KeyValueService {
      * @return The key-value pair
      * @throws ReefServiceException
      */
-    KeyValue getMessage(String key) throws ReefServiceException;
+    KeyValue getValue(String key) throws ReefServiceException;
 
     /**
      * Get all key-value pairs
@@ -26,7 +26,7 @@ public interface KeyValueService {
      * @return The list of key-value pairs
      * @throws ReefServiceException
      */
-    List<KeyValue> getAllMessages() throws ReefServiceException;
+    List<KeyValue> getAllValues() throws ReefServiceException;
 
     /**
      * Put a key-value pair, adding if one doesn't exist already, modifying otherwise
@@ -36,7 +36,7 @@ public interface KeyValueService {
      * @return The key-value pair that was put by the service
      * @throws ReefServiceException
      */
-    KeyValue putMessage(String key, String value) throws ReefServiceException;
+    KeyValue putValue(String key, String value) throws ReefServiceException;
 
     /**
      * Delete a specific key-value pair by specifying the key
@@ -44,14 +44,14 @@ public interface KeyValueService {
      * @param key Key of the key-value pair
      * @throws ReefServiceException
      */
-    void deleteMessage(String key) throws ReefServiceException;
+    void deleteValue(String key) throws ReefServiceException;
 
     /**
      * Delete all entries in the system
      *
      * @throws ReefServiceException
      */
-    void deleteAllMessages() throws ReefServiceException;
+    void deleteAllValues() throws ReefServiceException;
 
     /**
      * Subscribe to all subscription events associated with all KeyValue service objects

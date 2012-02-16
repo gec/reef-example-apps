@@ -32,7 +32,7 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public KeyValue getMessage(String key) throws ReefServiceException {
+    public KeyValue getValue(String key) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
@@ -49,7 +49,7 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public List<KeyValue> getAllMessages() throws ReefServiceException {
+    public List<KeyValue> getAllValues() throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
@@ -68,7 +68,7 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public KeyValue putMessage(String key, String value) throws ReefServiceException {
+    public KeyValue putValue(String key, String value) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
@@ -85,7 +85,7 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public void deleteMessage(String key) throws ReefServiceException {
+    public void deleteValue(String key) throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 
@@ -101,7 +101,7 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public void deleteAllMessages() throws ReefServiceException {
+    public void deleteAllValues() throws ReefServiceException {
 
         ClientOperations operations = client.getService(ClientOperations.class);
 

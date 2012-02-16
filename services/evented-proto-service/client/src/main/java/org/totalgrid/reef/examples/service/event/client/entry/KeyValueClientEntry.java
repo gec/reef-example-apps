@@ -56,21 +56,21 @@ public class KeyValueClientEntry {
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
         // Put a key/value pair that doesn't currently exist
-        KeyValue addResponse = keyValueService.putMessage("testKey", "testValue");
+        KeyValue addResponse = keyValueService.putValue("testKey", "testValue");
 
         System.out.println("-- Added rest message: " + addResponse);
 
         // Put a key/value pair that exists, modifying the current key/value in the map
-        KeyValue modifyResponse = keyValueService.putMessage("testKey", "secondValue");
+        KeyValue modifyResponse = keyValueService.putValue("testKey", "secondValue");
 
         System.out.println("-- Modify rest message: " + modifyResponse);
 
-        System.out.println("-- Current message store, pre-delete: " + keyValueService.getAllMessages());
+        System.out.println("-- Current message store, pre-delete: " + keyValueService.getAllValues());
 
         // Clean-up the key/value pair (causing a "REMOVED" event)
-        keyValueService.deleteMessage("testKey");
+        keyValueService.deleteValue("testKey");
 
-        System.out.println("-- Current message store, post-delete: " + keyValueService.getAllMessages());
+        System.out.println("-- Current message store, post-delete: " + keyValueService.getAllValues());
     }
 
     /**
@@ -95,13 +95,13 @@ public class KeyValueClientEntry {
         subResult.getSubscription().start(new PrintingEventAcceptor());
 
         // Add a KeyValue with the key we're subscribed to
-        KeyValue firstAdd = keyValueService.putMessage("key01", "value01");
+        KeyValue firstAdd = keyValueService.putValue("key01", "value01");
 
         // Add a KeyValue with the key we're NOT subscribed to
-        KeyValue secondAdd = keyValueService.putMessage("key02", "value02");
+        KeyValue secondAdd = keyValueService.putValue("key02", "value02");
 
         // Clean up all messages, should receive and event for "key01"
-        keyValueService.deleteAllMessages();
+        keyValueService.deleteAllValues();
 
         return subResult.getSubscription();
     }

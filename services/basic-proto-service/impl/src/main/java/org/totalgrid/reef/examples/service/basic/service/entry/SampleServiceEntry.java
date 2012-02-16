@@ -46,10 +46,13 @@ public class SampleServiceEntry {
             // Connect to the Reef server, may fail if can't connect
             connection = connectionFactory.connect();
 
+            // Add the sample service list, which contains the type description of the sample service message
             connection.addServicesList(new SampleServiceList());
 
+            // Obtain the service registration interface to perform service provider duties
             ServiceRegistration registration = connection.getServiceRegistration();
 
+            // Bind sample service, routing sample messages to the service implementation
             registration.bindService(new SampleService(), new SampleMessageDescriptor(), new AnyNodeDestination(), true);
             
             System.out.println("Service registered. Press any key to exit...");
