@@ -8,6 +8,10 @@
     <packaging>pom</packaging>
 	<version>0.4.4-SNAPSHOT</version>
 
+    <properties>
+        <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
+    </properties>
+
 	<modules>
         <module>apps/web-war</module>
         <module>apps/web-embedded</module>
@@ -31,5 +35,33 @@
 
         <module>assembly</module>
 	</modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>${maven-license-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>.idea/**</exclude>
+                    </excludes>
+                    <strictCheck>true</strictCheck>
+                    <failIfMissing>true</failIfMissing>
+                    <aggregate>true</aggregate>
+                    <header>APACHE_FILE_HEADER</header>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-headers</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
