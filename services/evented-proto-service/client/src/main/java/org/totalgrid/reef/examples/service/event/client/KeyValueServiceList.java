@@ -27,6 +27,8 @@ public class KeyValueServiceList implements ServicesList {
     public List<ServiceTypeInformation<?, ?>> getServiceTypeInformation() {
         List<ServiceTypeInformation<?, ?>> typeList = new ArrayList<ServiceTypeInformation<?, ?>>();
 
+        // Build type information with KeyValueDescriptor for both request/response and subscription event types
+        // (They might theoretically be different, i.e. MeasurementSnapshot -> Measurement)
         typeList.add(new BasicServiceTypeInformation(new KeyValueDescriptor(), new KeyValueDescriptor()));
 
         return typeList;
@@ -41,6 +43,7 @@ public class KeyValueServiceList implements ServicesList {
     public List<ServiceProviderInfo> getServiceProviders() {
         List<ServiceProviderInfo> list = new ArrayList<ServiceProviderInfo>();
 
+        // Build provider info with KeyValueServiceFactory, specify that it builds the KeyValueService class
         list.add(new BasicServiceProviderInfo(new KeyValueServiceFactory(), KeyValueService.class));
 
         return list;

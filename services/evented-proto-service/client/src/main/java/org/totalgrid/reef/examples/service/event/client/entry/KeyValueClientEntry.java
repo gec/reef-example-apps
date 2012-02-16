@@ -17,58 +17,90 @@ public class KeyValueClientEntry {
 
     private KeyValueClientEntry() {}
 
-
-    
+    /**
+     * Demonstrates subscribing to all subscription events associated with KeyValue service objects.
+     *
+     * @param client Logged-in client
+     * @return
+     * @throws ReefServiceException
+     */
     public static Subscription<KeyValue> subscribe(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Subscribe ===\n\n");
 
+        // Get KeyValueService interface from logged-in client
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
+        // Make subscription, getting an interface used to start the subscription, along with all immediate results of the query
         SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToAllKeyValues();
         
         System.out.println("-- Immediate results of subscription: " + subResult.getResult());
 
+        // Start the subscription, forwarding events to a simple println implementation of an event acceptor
         subResult.getSubscription().start(new PrintingEventAcceptor());
 
         return subResult.getSubscription();
     }
 
+    /**
+     * Demonstrates adding/modifying/removing a service object
+     *
+     * @param client Logged-in client
+     * @throws ReefServiceException
+     */
     public static void showLifecycle(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Show Lifecycle ===\n\n");
 
+        // Get KeyValueService interface from logged-in client
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
+        // Put a key/value pair that doesn't currently exist
         KeyValue addResponse = keyValueService.putMessage("testKey", "testValue");
 
         System.out.println("-- Added rest message: " + addResponse);
 
+        // Put a key/value pair that exists, modifying the current key/value in the map
         KeyValue modifyResponse = keyValueService.putMessage("testKey", "secondValue");
 
         System.out.println("-- Modify rest message: " + modifyResponse);
 
         System.out.println("-- Current message store, pre-delete: " + keyValueService.getAllMessages());
 
+        // Clean-up the key/value pair (causing a "REMOVED" event)
         keyValueService.deleteMessage("testKey");
 
         System.out.println("-- Current message store, post-delete: " + keyValueService.getAllMessages());
     }
 
+    /**
+     * Demonstrates subscribing to a specific key/value pair. Events should only be
+     * received for the key we subscribed to.
+     *
+     * @param client Logged-in client
+     * @return
+     * @throws ReefServiceException
+     */
     public static Subscription<KeyValue> subscribeToSpecificKey(Client client) throws ReefServiceException {
 
         System.out.print("\n=== Subscribe To Specific Key ===\n\n");
 
+        // Get KeyValueService interface from logged-in client
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
+        // Subscribe to only "key01" objects, getting an interface used to start the subscription, along with all immediate results of the query
         SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToKeyValues("key01");
 
+        // Start the subscription, forwarding events to a simple println implementation of an event acceptor
         subResult.getSubscription().start(new PrintingEventAcceptor());
 
+        // Add a KeyValue with the key we're subscribed to
         KeyValue firstAdd = keyValueService.putMessage("key01", "value01");
 
+        // Add a KeyValue with the key we're NOT subscribed to
         KeyValue secondAdd = keyValueService.putMessage("key02", "value02");
 
+        // Clean up all messages, should receive and event for "key01"
         keyValueService.deleteAllMessages();
 
         return subResult.getSubscription();
@@ -108,14 +140,19 @@ public class KeyValueClientEntry {
             // Login with the user credentials
             Client client = connection.login(user);
 
+            // Subscribe to all service events
             Subscription<KeyValue> firstSub = subscribe(client);
 
+            // Add, modify and delete an object -- should cause subscription events
             showLifecycle(client);
 
+            // Cancel first subscription
             firstSub.cancel();
 
+            // Demonstrates a partial subscription
             Subscription<KeyValue> secondSub = subscribeToSpecificKey(client);
 
+            // Cancels second subscription
             secondSub.cancel();
             
             System.in.read();
@@ -142,9 +179,16 @@ public class KeyValueClientEntry {
         System.exit(result);
     }
 
-
+    /**
+     * Simple SubscriptionEventAcceptor that prints received events to the screen
+     */
     public static class PrintingEventAcceptor implements SubscriptionEventAcceptor<KeyValue> {
 
+        /**
+         * Allows clients to handle subscription events when they occur
+         *
+         * @param subscriptionEvent Subscription type (ADDED/MODIFIED/REMOVED) and message payload
+         */
         @Override
         public void onEvent(SubscriptionEvent<KeyValue> subscriptionEvent) {
             System.out.println("-- Got subscription event: " + subscriptionEvent);

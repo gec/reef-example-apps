@@ -12,24 +12,62 @@ import java.util.List;
 public interface KeyValueService {
 
     /**
+     * Get a single value by name
      *
-     *
-     * @param key
-     * @return
+     * @param key Key of the key-value pair
+     * @return The key-value pair
      * @throws ReefServiceException
      */
     KeyValue getMessage(String key) throws ReefServiceException;
 
+    /**
+     * Get all key-value pairs
+     *
+     * @return The list of key-value pairs
+     * @throws ReefServiceException
+     */
     List<KeyValue> getAllMessages() throws ReefServiceException;
 
+    /**
+     * Put a key-value pair, adding if one doesn't exist already, modifying otherwise
+     *
+     * @param key Key of the key-value pair
+     * @param value Value of the key-value pair
+     * @return The key-value pair that was put by the service
+     * @throws ReefServiceException
+     */
     KeyValue putMessage(String key, String value) throws ReefServiceException;
 
+    /**
+     * Delete a specific key-value pair by specifying the key
+     *
+     * @param key Key of the key-value pair
+     * @throws ReefServiceException
+     */
     void deleteMessage(String key) throws ReefServiceException;
 
+    /**
+     * Delete all entries in the system
+     *
+     * @throws ReefServiceException
+     */
     void deleteAllMessages() throws ReefServiceException;
-    
+
+    /**
+     * Subscribe to all subscription events associated with all KeyValue service objects
+     *
+     * @return Contains immediate results to the query as well as subscription management object
+     * @throws ReefServiceException
+     */
     SubscriptionResult<List<KeyValue>, KeyValue> subscribeToAllKeyValues() throws ReefServiceException;
-    
+
+    /**
+     * Subscribe to subscription events associated with a specific KeyValue service object (by key)
+     *
+     * @param key Key of the key-value pair
+     * @return Contains immediate results to the query as well as subscription management object
+     * @throws ReefServiceException
+     */
     SubscriptionResult<List<KeyValue>, KeyValue> subscribeToKeyValues(String key) throws ReefServiceException;
 
 }
