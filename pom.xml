@@ -44,7 +44,7 @@
                 <version>${maven-license-plugin.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>.idea/**</exclude>
+                        <exclude>.idea/*</exclude>
                     </excludes>
                     <strictCheck>true</strictCheck>
                     <failIfMissing>true</failIfMissing>
