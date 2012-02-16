@@ -19,7 +19,9 @@ public class KeyValueClientEntry {
 
 
     
-    public static void subscribe(Client client) throws ReefServiceException {
+    public static Subscription<KeyValue> subscribe(Client client) throws ReefServiceException {
+
+        System.out.print("\n=== Subscribe ===\n\n");
 
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
@@ -28,9 +30,13 @@ public class KeyValueClientEntry {
         System.out.println("-- Immediate results of subscription: " + subResult.getResult());
 
         subResult.getSubscription().start(new PrintingEventAcceptor());
+
+        return subResult.getSubscription();
     }
 
     public static void showLifecycle(Client client) throws ReefServiceException {
+
+        System.out.print("\n=== Show Lifecycle ===\n\n");
 
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
@@ -47,6 +53,25 @@ public class KeyValueClientEntry {
         keyValueService.deleteMessage("testKey");
 
         System.out.println("-- Current message store, post-delete: " + keyValueService.getAllMessages());
+    }
+
+    public static Subscription<KeyValue> subscribeToSpecificKey(Client client) throws ReefServiceException {
+
+        System.out.print("\n=== Subscribe To Specific Key ===\n\n");
+
+        KeyValueService keyValueService = client.getService(KeyValueService.class);
+
+        SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToKeyValues("key01");
+
+        subResult.getSubscription().start(new PrintingEventAcceptor());
+
+        KeyValue firstAdd = keyValueService.putMessage("key01", "value01");
+
+        KeyValue secondAdd = keyValueService.putMessage("key02", "value02");
+
+        keyValueService.deleteAllMessages();
+
+        return subResult.getSubscription();
     }
 
     public static void main(String[] args) throws Exception {
@@ -83,9 +108,15 @@ public class KeyValueClientEntry {
             // Login with the user credentials
             Client client = connection.login(user);
 
-            subscribe(client);
+            Subscription<KeyValue> firstSub = subscribe(client);
 
             showLifecycle(client);
+
+            firstSub.cancel();
+
+            Subscription<KeyValue> secondSub = subscribeToSpecificKey(client);
+
+            secondSub.cancel();
             
             System.in.read();
 

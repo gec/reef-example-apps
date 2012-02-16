@@ -10,8 +10,19 @@ import org.totalgrid.reef.examples.service.event.client.impl.KeyValueServiceFact
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ServiceList implementation for KeyValue service messages.
+ *
+ * Provides service clients KeyValueDescriptors and factories to build implementations
+ * of the KeyValueService interface.
+ */
 public class KeyValueServiceList implements ServicesList {
 
+    /**
+     * Exposes ServiceTypeInformation for KeyValue service message
+     *
+     * @return ServiceTypeInformation used to route service requests
+     */
     @Override
     public List<ServiceTypeInformation<?, ?>> getServiceTypeInformation() {
         List<ServiceTypeInformation<?, ?>> typeList = new ArrayList<ServiceTypeInformation<?, ?>>();
@@ -21,6 +32,11 @@ public class KeyValueServiceList implements ServicesList {
         return typeList;
     }
 
+    /**
+     * Provides a factory to build impls of KeyValueService client interfaces.
+     *
+     * @return
+     */
     @Override
     public List<ServiceProviderInfo> getServiceProviders() {
         List<ServiceProviderInfo> list = new ArrayList<ServiceProviderInfo>();

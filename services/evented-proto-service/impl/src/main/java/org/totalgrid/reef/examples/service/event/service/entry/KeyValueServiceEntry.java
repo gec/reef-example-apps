@@ -46,12 +46,18 @@ public class KeyValueServiceEntry {
             // Connect to the Reef server, may fail if can't connect
             connection = connectionFactory.connect();
 
+            // Add the KeyValue service list, which contains the type description of the KeyValue service message
             connection.addServicesList(new KeyValueServiceList());
 
+            // Obtain the service registration interface to perform service provider duties
             ServiceRegistration registration = connection.getServiceRegistration();
 
+            // Obtain the event publisher interface for the service to provide subscriptions/publish events
             EventPublisher eventPublisher = registration.getEventPublisher();
 
+            // Bind KeyValue service to handle KeyValue requests.
+            // Uses AnyNodeDestination and competing consumers patterns -- meaning all service instances are interchangeable.
+            // (This isn't actually true since the "back-end" is in-memory, but we are assuming a single node for this example).
             registration.bindService(new KeyValueService(eventPublisher), new KeyValueDescriptor(), new AnyNodeDestination(), true);
 
             System.out.println("Service registered. Press any key to exit...");
