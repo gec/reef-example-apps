@@ -9,9 +9,30 @@ best practices for writing reef applications.
 Projects
 ------------------------
 
-- _State Optimizer_ : Reads measurements and issues commands on a period 
-  to do global optmization of the system.
+- Client API
+    - **Alarms** : Demonstrates "Alarm" service client operations.
+    - **Applications** : Demonstrates "ApplicationConfig" service client operations.
+    - **Commands** : Demonstrates service client operations around command modeling, locking, and execution.
+    - **ConfigFile** : Demonstrates "ConfigFile" service client operations.
+    - **Endpoints** : Demonstrates service client operations for inspecting and enabling/disabling endpoints.
+    - **Entities** : Demonstrates entity model queries.
+    - **Event Publishing** : Demonstrates the event publishing service client operations.
+    - **Events** : Demonstrates querying for events.
+    - **Login** : Basis for all other client API examples, demonstrates creating a connection the server and using credentials to log-in to the services.
+    - **Measurement History** : Demonstrates queries for past measurements.
+    - **Measurement Publishing** : Demonstrates publishing new measurements to points.
+    - **Measurements** : Demonstrates queries for current measurements (measurement snapshots).
+    - **Points** : Demonstrates service client operations for point model objects.
+    - **Subscriptions** : Demonstrates subscribing to subscription service events for services (in this case measurements). 
 
+- Applications
+    - **State Optimizer** : Reads measurements and issues commands on a period to do global optmization of the system.
+    - **Web Embedded** : An embedded [Jetty](http://www.eclipse.org/jetty/) application that serves a page which lists the current values of measurements in the system. 
+    - **Web WAR** : A traditional Java web application (WAR) that hosts a servlet that displays the current values of measurements in the system.
+
+- Services
+    - **Basic Proto Service** : A skeleton implementation of a Reef service that demonstrates the various parts of hosting a service and providing a client library. 
+    - **Evented Proto Service** : A more complete service implementation, demonstrating using the RESTful verbs and issuing service subscription events when service objects are added/modified/removed. The "back-end" for the service is a simple concurrent map instead of a database connection.
 
 Dependencies & Environment
 ------------------------
