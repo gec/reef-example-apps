@@ -6,7 +6,7 @@
 	<artifactId>example-parent</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>pom</packaging>
-	<version>0.4.4-SNAPSHOT</version>
+	<version>0.4.5</version>
 
     <properties>
         <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
