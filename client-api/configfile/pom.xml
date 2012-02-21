@@ -4,7 +4,7 @@
     <artifactId>configfile</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.5</version>
+    <version>0.4.6-SNAPSHOT</version>
 
     <build>
         <plugins>

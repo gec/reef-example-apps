@@ -4,7 +4,7 @@
     <artifactId>basic-proto-service-client</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>jar</packaging>
-    <version>0.4.5</version>
+    <version>0.4.6-SNAPSHOT</version>
 
     <properties>
         <maven-protoc-plugin.version>0.1.9-GEC</maven-protoc-plugin.version>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-service-client</artifactId>
-            <version>0.4.5</version>
+            <version>0.4.6-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
