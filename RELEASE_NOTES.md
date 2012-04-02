@@ -22,4 +22,4 @@ This focus is primarily related to the http-bridge and jQuery client.
 
 * Added web application examples: *Web Embedded*, *Web WAR*
 
-* All projects now working off of Reef 0.4.5. 
+* All projects now working off of Reef 0.4.5.
