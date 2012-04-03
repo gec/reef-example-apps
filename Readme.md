@@ -55,7 +55,7 @@ First you will need a running distribution see: http://reef.totalgrid.org/docume
   - Run "Build > Make Project" to have IntelliJ collect the dependencies and build the project. 
     Note:  Reef apis are maintained in a maven artifactory repository and you will need network access to the internet.
 
-You will also need an approriate "System Model" to run your application against.
+You will also need an appropriate "System Model" to run your application against.
 There are a few examples provided with the Reef distribution (in the samples
 directory) for generic applications but some example applications will include 
 their own configuration file in the root directory.

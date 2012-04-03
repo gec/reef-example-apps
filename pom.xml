@@ -16,6 +16,7 @@
         <module>apps/web-war</module>
         <module>apps/web-embedded</module>
 		<module>apps/state-optimizer</module>
+        <module>apps/basic-protocol</module>
 		<module>client-api/login</module>
 		<module>client-api/points</module>
 		<module>client-api/measurements</module>
