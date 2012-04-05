@@ -18,12 +18,12 @@
  */
 package org.totalgrid.reef.examples.protocol.basic.adapter;
 
+import org.totalgrid.reef.client.service.command.CommandRequestHandler;
+import org.totalgrid.reef.client.service.command.CommandResultCallback;
 import org.totalgrid.reef.client.service.proto.Commands;
 import org.totalgrid.reef.examples.protocol.basic.library.ExternalCommandAcceptor;
-import org.totalgrid.reef.protocol.api.CommandHandler;
-import org.totalgrid.reef.protocol.api.Publisher;
 
-public class CommandAdapter implements CommandHandler {
+public class CommandAdapter implements CommandRequestHandler {
 
     private final ExternalCommandAcceptor acceptor;
 
@@ -31,6 +31,20 @@ public class CommandAdapter implements CommandHandler {
         this.acceptor = acceptor;
     }
 
+    @Override
+    public void handleCommandRequest(Commands.CommandRequest cmdRequest, CommandResultCallback resultCallback) {
+        String name = cmdRequest.getCommand().getName();
+
+        boolean status = acceptor.handleCommand(name);
+
+        if (status) {
+            resultCallback.setCommandResult(Commands.CommandStatus.SUCCESS);
+        } else {
+            resultCallback.setCommandResult(Commands.CommandStatus.TIMEOUT);
+        }
+    }
+
+    /*
     @Override
     public void issue(Commands.CommandRequest command, Publisher<Commands.CommandStatus> responsePublisher) {
         String name = command.getCommand().getName();
@@ -42,5 +56,5 @@ public class CommandAdapter implements CommandHandler {
         } else {
             responsePublisher.publish(Commands.CommandStatus.TIMEOUT);
         }
-    }
+    }*/
 }

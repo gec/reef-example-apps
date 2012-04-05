@@ -37,7 +37,7 @@ public class ExternalProtocol implements ExternalCommandAcceptor {
         public void run() {
             long time = System.currentTimeMillis();
             Random rand = new Random(time);
-            updateAcceptor.handleUpdate("Point01", rand.nextDouble(), time);
+            updateAcceptor.handleUpdate("ExternalDevice.Point01", rand.nextDouble(), time);
         }
     }
 

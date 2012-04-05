@@ -18,18 +18,28 @@
  */
 package org.totalgrid.reef.examples.protocol.basic.adapter;
 
+import org.totalgrid.reef.client.AddressableDestination;
+import org.totalgrid.reef.client.AnyNodeDestination;
+import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.service.MeasurementService;
 import org.totalgrid.reef.client.service.proto.Measurements;
 import org.totalgrid.reef.client.service.proto.Measurements.Measurement;
 import org.totalgrid.reef.client.service.proto.Measurements.MeasurementBatch;
 import org.totalgrid.reef.examples.protocol.basic.library.ExternalUpdateAcceptor;
 import org.totalgrid.reef.protocol.api.Publisher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UpdateAdapter implements ExternalUpdateAcceptor {
 
-    private final Publisher<MeasurementBatch> publisher;
+    private final String routingKey;
+    private final MeasurementService service;
 
-    public UpdateAdapter(Publisher<MeasurementBatch> publisher) {
-        this.publisher = publisher;
+    public UpdateAdapter(MeasurementService service, String routingKey) {
+        this.routingKey = routingKey;
+        this.service = service;
     }
 
     @Override
@@ -40,9 +50,14 @@ public class UpdateAdapter implements ExternalUpdateAcceptor {
         builder.setDoubleVal(value);
         builder.setTime(time);
         builder.setQuality(Measurements.Quality.newBuilder().build());
-        
-        MeasurementBatch batch = MeasurementBatch.newBuilder().addMeas(builder.build()).build();
 
-        publisher.publish(batch);
+        List<Measurement> list = new ArrayList<Measurement>();
+        list.add(builder.build());
+
+        try {
+            service.publishMeasurements(list, new AddressableDestination(routingKey));
+        } catch (ReefServiceException ex) {
+            System.out.println("Could not publish measurement batch! " + ex);
+        }
     }
 }

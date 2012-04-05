@@ -69,7 +69,7 @@ public class ConfigFileExample {
         System.out.println("Name: " + first.getName());
         System.out.println("Mime-type: " + first.getMimeType());
         System.out.println("UUID: " + first.getUuid().getValue());
-        System.out.println("Data: \"" + first.getFile().toStringUtf8().substring(0, 30) + "...\"");
+        System.out.println("Data: \"" + first.getFile().toStringUtf8() + "...\"");
 
         for (Entity entity : first.getEntitiesList()) {
             System.out.println("Entity: " + entity.getName());

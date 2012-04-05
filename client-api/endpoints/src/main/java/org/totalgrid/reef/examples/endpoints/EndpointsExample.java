@@ -132,7 +132,7 @@ public class EndpointsExample {
         EndpointService endpointService = client.getService(EndpointService.class);
 
         // Select a single endpoint connection
-        EndpointConnection endpoint = endpointService.getEndpointConnections().get(0);
+        EndpointConnection endpoint = endpointService.getEndpointConnectionByEndpointName("SimulatedEndpoint");
 
         // Display origin state (should be enabled, COMMS_UP)
         System.out.println("Original: " + endpoint.getEndpoint().getName() + ", " + endpoint.getEnabled() + ", " + endpoint.getState());

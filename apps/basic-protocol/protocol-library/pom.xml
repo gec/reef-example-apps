@@ -3,11 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>protocol-library</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <version>0.4.7-SNAPSHOT</version>
 
     <properties>
         <maven-protoc-plugin.version>0.1.9-GEC</maven-protoc-plugin.version>
+        <maven-bundle.version>2.1.0</maven-bundle.version>
     </properties>
 
     <build>
@@ -22,21 +23,18 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.google.protobuf.tools</groupId>
-                <artifactId>maven-protoc-plugin</artifactId>
-                <version>${maven-protoc-plugin.version}</version>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven-bundle.version}</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <protoSourceRoot>src/main/proto</protoSourceRoot>
-                    <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+                    <instructions>
+                        <Bundle-Name>Protocol Library Example</Bundle-Name>
+                        <Export-Package>org.totalgrid.reef.examples.protocol.basic.library.*;version="${project.version}"</Export-Package>
+                        <Import-Package>org.slf4j;version="[1.5,2.0)",*</Import-Package>
+                        <_nouses>true</_nouses>
+                    </instructions>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
