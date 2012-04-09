@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!--
-
-    Copyright 2011 Green Energy Corp.
-
-    Licensed to Green Energy Corp (www.greenenergycorp.com) under one or more
-    contributor license agreements. See the NOTICE file distributed with this
-    work for additional information regarding copyright ownership. Green Energy
-    Corp licenses this file to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-    License for the specific language governing permissions and limitations under
-    the License.
-
--->
 <configuration version="1.0"
                xmlns="configuration.loader.reef.totalgrid.org"
                xmlns:equip="equipment.loader.reef.totalgrid.org"
@@ -26,17 +6,14 @@
                xmlns:common="common.loader.reef.totalgrid.org">
 
 	<actionModel>
-
 		<actionSet name="Nominal">
 			<rising>
 				<message name="Scada.OutOfNominal"/>
 			</rising>
-
 			<high>
 				<setAbnormal/>
 			</high>
 		</actionSet>
-
 	</actionModel>
 
 	<equip:equipmentModel>
@@ -47,17 +24,14 @@
 					<equip:valueMap fromValue="true" toValue="TRIPPED"/>
 					<equip:valueMap fromValue="false" toValue="CLOSED"/>
 				</equip:transform>
-
 				<equip:unexpected stringValue="TRIPPED" actionSet="Nominal"/>
 			</equip:pointProfile>
 
 			<equip:pointProfile name="BreakerStatus">
-				<!-- fromUnit and toUnit can be ommitted, we assume "raw" for fromUnit and point unit for toUnit -->
 				<equip:transform fromUnit="raw" toUnit="status" transformationType="status">
 					<equip:valueMap fromValue="true" toValue="CLOSED"/>
 					<equip:valueMap fromValue="false" toValue="TRIPPED"/>
 				</equip:transform>
-
 				<equip:unexpected stringValue="CLOSED" actionSet="Nominal"/>
 			</equip:pointProfile>
 
@@ -74,9 +48,6 @@
 
 				<equip:control name="Close">
 					<equip:type name="bkrClose"/>
-					<common:info>
-						<common:attribute name="display.hide" booleanValue="false"/>
-					</common:info>
 				</equip:control>
 
                 <equip:setpoint name="TripSetting" setpointType="string" />
@@ -93,7 +64,6 @@
 			</equip:equipmentProfile>
 
 			<equip:equipmentProfile name="MockLine">
-				<!-- A made-up setpoint for use with integration tests -->
 				<equip:setpoint name="VoltageSetpoint">
 
 				</equip:setpoint>
@@ -103,9 +73,6 @@
 					<equip:range actionSet="Nominal" low="10" high="20" deadband="0.5"/>
                     <equip:filter deadband="0.5"/>
 					<equip:setpoint name="VoltageSetpoint"/>
-					<common:info>
-						<common:attribute name="display.hide" booleanValue="false"/>
-					</common:info>
 				</equip:analog>
 			</equip:equipmentProfile>
 
@@ -117,18 +84,12 @@
 			<equip:equipment name="Breaker01">
 				<equip:equipmentProfile name="MockBreaker"/>
 				<common:info>
-					<common:configFile name="Notes.txt" mimeType="text/text"><![CDATA[
-                  This breaker is special.  
-                  ]]></common:configFile>
-					<common:attribute name="display.icon" stringValue="circuit-breaker"/>
+					<common:configFile name="Notes.txt" mimeType="text/text"><![CDATA[This breaker is special.]]></common:configFile>
 				</common:info>
 			</equip:equipment>
 
 			<equip:equipment name="Line01">
 				<equip:equipmentProfile name="MockLine"/>
-				<common:info>
-					<common:attribute name="display.icon" stringValue="line-segment"/>
-				</common:info>
 			</equip:equipment>
 		</equip:equipment>
 
@@ -143,6 +104,12 @@
 				<equip:equipmentProfile name="MockLine"/>
 			</equip:equipment>
 		</equip:equipment>
+
+        <equip:equipment name="ExternalDevice">
+            <equip:type name="ExternalDevice"/>
+
+            <equip:analog name="Point01" unit="V" />
+        </equip:equipment>
 
 	</equip:equipmentModel>
 
@@ -190,6 +157,16 @@
 				</comm:equipment>
 			</comm:equipment>
 		</comm:endpoint>
+
+        <comm:endpoint name="ExternalEndpoint">
+            <comm:protocol name="ExternalProtocol" />
+
+            <!--<comm:interface name="ExternalChannel" />-->
+
+            <comm:equipment name="ExternalDevice">
+                <comm:analog name="Point01" index="0" unit="V"/>
+            </comm:equipment>
+        </comm:endpoint>
 
 	</comm:communicationsModel>
 

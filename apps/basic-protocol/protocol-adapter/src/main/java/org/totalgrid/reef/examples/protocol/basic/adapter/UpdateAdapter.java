@@ -27,23 +27,41 @@ import org.totalgrid.reef.client.service.proto.Measurements;
 import org.totalgrid.reef.client.service.proto.Measurements.Measurement;
 import org.totalgrid.reef.client.service.proto.Measurements.MeasurementBatch;
 import org.totalgrid.reef.examples.protocol.basic.library.ExternalUpdateAcceptor;
+import org.totalgrid.reef.protocol.api.ProtocolResources;
 import org.totalgrid.reef.protocol.api.Publisher;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bridge between external (fake) protocol API and the Reef
+ * protocol API. Forwards a measurement update notification from the
+ * external protocol to the Reef client API.
+ */
 public class UpdateAdapter implements ExternalUpdateAcceptor {
 
-    private final String routingKey;
-    private final MeasurementService service;
+    ProtocolResources resources;
 
-    public UpdateAdapter(MeasurementService service, String routingKey) {
-        this.routingKey = routingKey;
-        this.service = service;
+    /**
+     * @param resources Protocol resources helper to use to publish measurements
+     */
+    public UpdateAdapter(ProtocolResources resources) {
+        this.resources = resources;
     }
 
+    /**
+     * Implementation of external protocol measurement callback, translates
+     * update to Reef measurement and uses client-based ProtocolResources
+     * interface to publish it.
+     *
+     * @param name Measurement name
+     * @param value Analog value
+     * @param time Time in milliseconds
+     */
     @Override
     public void handleUpdate(String name, double value, long time) {
+
+        // Build measurement object to represent this update
         Measurement.Builder builder = Measurement.newBuilder();
         builder.setName(name);
         builder.setType(Measurement.Type.DOUBLE);
@@ -54,8 +72,9 @@ public class UpdateAdapter implements ExternalUpdateAcceptor {
         List<Measurement> list = new ArrayList<Measurement>();
         list.add(builder.build());
 
+        // Publish measurements to the system
         try {
-            service.publishMeasurements(list, new AddressableDestination(routingKey));
+            resources.publishMeasurements(list);
         } catch (ReefServiceException ex) {
             System.out.println("Could not publish measurement batch! " + ex);
         }

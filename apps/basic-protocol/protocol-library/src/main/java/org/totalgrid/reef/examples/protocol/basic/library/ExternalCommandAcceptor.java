@@ -18,6 +18,19 @@
  */
 package org.totalgrid.reef.examples.protocol.basic.library;
 
+/**
+ * Represents the fake protocol API's callback to handle
+ * command requests. Intended to be used by clients to
+ * notify the protocol of command requests.
+ *
+ */
 public interface ExternalCommandAcceptor {
+
+    /**
+     * Called when the protocol needs to handle a command request.
+     *
+     * @param name Name of the command.
+     * @return
+     */
     public boolean handleCommand(String name);
 }

@@ -36,44 +36,63 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Protocol adapter that implements the ProtocolManager interface to provide the Reef FEP
+ * subsystem with a wrapper for an external protocol implementation.
+ */
 public class ProtocolAdapter implements ProtocolManager {
 
+    private final Map<String, ProtocolInstance> endpointMap = new HashMap<String, ProtocolInstance>();
 
-
-    Map<String, ExternalProtocol> endpointMap = new HashMap<String, ExternalProtocol>();
-
+    /**
+     * Called by the FEP to notify the protocol manager that it should make a protocol connection to the
+     * specified endpoint.
+     *
+     * @param client Client logged in with protocol permissions
+     * @param endpointConnection Description of the endpoint connection, also includes endpoint configuration and config files
+     * @return
+     */
     @Override
     public CommandRequestHandler addEndpoint(Client client, FEP.EndpointConnection endpointConnection) {
 
-        String endpointName = endpointConnection.getEndpoint().getName();
+        // Acquire a utility class for protocol-related operations
+        ProtocolResources resources = ProtocolResourcesFactory.buildResources(client, endpointConnection);
+
+        String endpointName = resources.getEndpointName();
 
         System.out.println("Adding endpoint: " + endpointName);
 
+        // Create a protocol implementation
         ExternalProtocol protocol = new ExternalProtocol();
 
-        AllScadaService service = client.getService(AllScadaService.class);
+        // Create the adapter that publishes measurements
+        UpdateAdapter updateAdapter = new UpdateAdapter(resources);
 
-        String routingKey = endpointConnection.getRouting().getServiceRoutingKey();
-
-        UpdateAdapter updateAdapter = new UpdateAdapter(service, routingKey);
-
+        // Create the adapter that handles command requests
         CommandAdapter commandAdapter = new CommandAdapter(protocol);
 
-        endpointMap.put(endpointName, protocol);
+        // Store the protocol and configuration to handle removes
+        endpointMap.put(endpointName, new ProtocolInstance(protocol, resources));
 
+        // Attempt a connection (begin publishing measurements)
         protocol.connect(updateAdapter);
 
-        //service.alterCommunicationChannelState()
+        // Inform the system that this endpoint is now online
         try {
-            service.alterEndpointConnectionState(endpointConnection.getId(), FEP.EndpointConnection.State.COMMS_UP);
+            resources.setCommsState(FEP.EndpointConnection.State.COMMS_UP);
         } catch (ReefServiceException ex) {
             System.out.println("Couldn't update endpoint connection state. " + ex);
         }
 
+        // Provide the FEP with a callback for issuing commands
         return commandAdapter;
     }
 
+    /**
+     * Called by the FEP to notify the protocol manager it needs to shut down the endpoint.
+     *
+     * @param endpointConnection Description of the endpoint connection, also includes endpoint configuration and config files
+     */
     @Override
     public void removeEndpoint(FEP.EndpointConnection endpointConnection) {
 
@@ -81,11 +100,39 @@ public class ProtocolAdapter implements ProtocolManager {
 
         System.out.println("Removing endpoint: " + endpointName);
 
-        ExternalProtocol protocol = endpointMap.get(endpointName);
+        // Retrieves previously added protocol implementation
+        ProtocolInstance instance = endpointMap.get(endpointName);
 
+        ExternalProtocol protocol = instance.getProtocol();
+
+        // Disconnects protocol (stops publishing measurements)
         protocol.disconnect();
 
+        // Removes protocol from list
         endpointMap.remove(endpointName);
     }
+
+
+    /**
+     * Helper class for holding protocol/resource pairs
+     */
+    static class ProtocolInstance {
+        private final ExternalProtocol protocol;
+        private final ProtocolResources resources;
+
+        ProtocolInstance(ExternalProtocol protocol, ProtocolResources resources) {
+            this.protocol = protocol;
+            this.resources = resources;
+        }
+
+        public ExternalProtocol getProtocol() {
+            return protocol;
+        }
+
+        public ProtocolResources getResources() {
+            return resources;
+        }
+    }
+
 
 }

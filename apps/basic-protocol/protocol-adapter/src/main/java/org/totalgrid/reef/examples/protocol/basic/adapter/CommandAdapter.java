@@ -23,6 +23,13 @@ import org.totalgrid.reef.client.service.command.CommandResultCallback;
 import org.totalgrid.reef.client.service.proto.Commands;
 import org.totalgrid.reef.examples.protocol.basic.library.ExternalCommandAcceptor;
 
+/**
+ * Bridges between external protocol API command acceptor and the
+ * Reef API's CommandRequestHandler. Upon accepting a command request
+ * from Reef, forwards to the external protocol command acceptor and
+ * translates the result into a CommandStatus.
+ *
+ */
 public class CommandAdapter implements CommandRequestHandler {
 
     private final ExternalCommandAcceptor acceptor;
@@ -31,12 +38,21 @@ public class CommandAdapter implements CommandRequestHandler {
         this.acceptor = acceptor;
     }
 
+    /**
+     * Translates the Reef CommandRequest object to a format the external protocol
+     * expects, then translates the response to a CommandResultCallback.
+     *
+     * @param cmdRequest Description of the command request to execute
+     * @param resultCallback Handler provided by Reef to notify command responses
+     */
     @Override
     public void handleCommandRequest(Commands.CommandRequest cmdRequest, CommandResultCallback resultCallback) {
         String name = cmdRequest.getCommand().getName();
 
+        // Pass command to the external protocol implementation
         boolean status = acceptor.handleCommand(name);
 
+        // Translate response into command status
         if (status) {
             resultCallback.setCommandResult(Commands.CommandStatus.SUCCESS);
         } else {
@@ -44,17 +60,4 @@ public class CommandAdapter implements CommandRequestHandler {
         }
     }
 
-    /*
-    @Override
-    public void issue(Commands.CommandRequest command, Publisher<Commands.CommandStatus> responsePublisher) {
-        String name = command.getCommand().getName();
-
-        boolean status = acceptor.handleCommand(name);
-        
-        if (status) {
-            responsePublisher.publish(Commands.CommandStatus.SUCCESS);
-        } else {
-            responsePublisher.publish(Commands.CommandStatus.TIMEOUT);
-        }
-    }*/
 }

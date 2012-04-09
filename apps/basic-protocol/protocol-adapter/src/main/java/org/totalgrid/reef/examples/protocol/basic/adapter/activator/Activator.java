@@ -26,6 +26,9 @@ import org.totalgrid.reef.protocol.api.ProtocolManager;
 
 import java.util.Properties;
 
+/**
+ *
+ */
 public class Activator implements BundleActivator {
 
     private ServiceRegistration registration;

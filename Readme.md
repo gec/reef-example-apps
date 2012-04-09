@@ -26,9 +26,10 @@ Projects
     - **Subscriptions** : Demonstrates subscribing to subscription service events for services (in this case measurements). 
 
 - Applications
-    - **State Optimizer** : Reads measurements and issues commands on a period to do global optmization of the system.
+    - **State Optimizer** : Reads measurements and issues commands on a period to do global optimization of the system.
     - **Web Embedded** : An embedded [Jetty](http://www.eclipse.org/jetty/) application that serves a page which lists the current values of measurements in the system. 
     - **Web WAR** : A traditional Java web application (WAR) that hosts a servlet that displays the current values of measurements in the system.
+    - **Basic Protocol** : Example of wrapping an external protocol library using the ProtocolManager interface. The `protocol-library` project represents "external" code, and the `protocol-adapter` project represents its bridge to the system.
 
 - Services
     - **Basic Proto Service** : A skeleton implementation of a Reef service that demonstrates the various parts of hosting a service and providing a client library. 

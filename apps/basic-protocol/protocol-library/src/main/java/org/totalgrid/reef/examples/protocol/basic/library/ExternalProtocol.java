@@ -22,10 +22,25 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * A simple, fake protocol implementation designed to help demonstrate
+ * building a Reef protocol adapter.
+ *
+ * Uses the two API interfaces, ExternalCommandAcceptor and ExternalUpdateAcceptor,
+ * to compose the protocol implementation.
+ *
+ * After connect() is called, starts a timer that generates a (random)
+ * analog measurement.
+ *
+ * Command handling consists of printing to the screen.
+ */
 public class ExternalProtocol implements ExternalCommandAcceptor {
 
     private Timer timer = null;
 
+    /**
+     * Timer task implementation that generates measurement updates.
+     */
     static class UpdateTask extends TimerTask {
         private final ExternalUpdateAcceptor updateAcceptor;
 
@@ -41,6 +56,13 @@ public class ExternalProtocol implements ExternalCommandAcceptor {
         }
     }
 
+    /**
+     * Simulates "connecting" to a device, takes a callback to use
+     * for measurement update notifications.
+     *
+     * @param acceptor Callback for the measurement protocol
+     * @return
+     */
     public boolean connect(ExternalUpdateAcceptor acceptor) {
         if (timer == null) {
             UpdateTask task = new UpdateTask(acceptor);
@@ -52,6 +74,9 @@ public class ExternalProtocol implements ExternalCommandAcceptor {
         }
     }
 
+    /**
+     * Cancels the timer, ceasing measurement updates.
+     */
     public void disconnect() {
         if (timer != null) {
             timer.cancel();
@@ -59,6 +84,12 @@ public class ExternalProtocol implements ExternalCommandAcceptor {
         }
     }
 
+    /**
+     * Provides console-based feedback for command requests.
+     *
+     * @param name
+     * @return
+     */
     @Override
     public boolean handleCommand(String name) {
         System.out.println("Handled command: " + name);

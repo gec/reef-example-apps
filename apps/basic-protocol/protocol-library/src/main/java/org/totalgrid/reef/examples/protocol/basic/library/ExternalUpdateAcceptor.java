@@ -18,6 +18,19 @@
  */
 package org.totalgrid.reef.examples.protocol.basic.library;
 
+/**
+ * Implemented by clients of the protocol to receive notifications
+ * of measurement updates.
+ *
+ */
 public interface ExternalUpdateAcceptor {
+
+    /**
+     * Callback for handling update notifications.
+     *
+     * @param name Measurement name
+     * @param value Analog value
+     * @param time Time in milliseconds
+     */
     public void handleUpdate(String name, double value, long time);
 }
