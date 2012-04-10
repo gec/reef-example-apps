@@ -61,8 +61,20 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.osgi.core</artifactId>
             <version>${felix-core.version}</version>
-        <scope>compile</scope>
-    </dependency>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.totalgrid.reef</groupId>
+            <artifactId>reef-standalone-fep</artifactId>
+            <version>0.4.7-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
     <repositories>
