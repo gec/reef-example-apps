@@ -310,6 +310,11 @@ public class CommandsExample {
             }
         }
 
+        if(setpoint == null){
+            System.out.println("No setpoints in system.");
+            return;
+        }
+
         System.out.println("Command to execute: " + setpoint.getName());
 
         // Get execution lock for selected setpoint

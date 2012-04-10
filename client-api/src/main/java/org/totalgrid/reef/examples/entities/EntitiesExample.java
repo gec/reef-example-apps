@@ -266,26 +266,29 @@ public class EntitiesExample {
         // Display the root node (point entity)
         System.out.println("Root: " + result.getName() + ", Types: " + result.getTypesList());
 
-        // Get immediate relationship
-        Relationship lowerRel = result.getRelations(0);
+        if(result.getRelationsCount() > 0){
 
-        System.out.println("+ Relationship: " + lowerRel.getRelationship() + ", Descendant: " + lowerRel.getDescendantOf() + ", Distance: " + lowerRel.getDistance());
+            // Get immediate relationship
+            Relationship lowerRel = result.getRelations(0);
 
-        // Display the immediate child entity ("Equipment")
-        Entity middle = lowerRel.getEntities(0);
+            System.out.println("+ Relationship: " + lowerRel.getRelationship() + ", Descendant: " + lowerRel.getDescendantOf() + ", Distance: " + lowerRel.getDistance());
 
-        System.out.println("  + Child: " + middle.getName() + ", Types: " + middle.getTypesList());
+            // Display the immediate child entity ("Equipment")
+            Entity middle = lowerRel.getEntities(0);
 
-        if(middle.getRelationsCount() > 0){
-            // Get second-depth relationship
-            Relationship higherRel = middle.getRelations(0);
+            System.out.println("  + Child: " + middle.getName() + ", Types: " + middle.getTypesList());
 
-            System.out.println("    + Relationship: " + higherRel.getRelationship() + ", Descendant: " + higherRel.getDescendantOf() + ", Distance: " + higherRel.getDistance());
+            if(middle.getRelationsCount() > 0){
+                // Get second-depth relationship
+                Relationship higherRel = middle.getRelations(0);
 
-            // Display the second child entity ("EquipmentGroup")
-            Entity high = higherRel.getEntities(0);
+                System.out.println("    + Relationship: " + higherRel.getRelationship() + ", Descendant: " + higherRel.getDescendantOf() + ", Distance: " + higherRel.getDistance());
 
-            System.out.println("      + Child: " + high.getName() + ", Types: " + high.getTypesList());
+                // Display the second child entity ("EquipmentGroup")
+                Entity high = higherRel.getEntities(0);
+
+                System.out.println("      + Child: " + high.getName() + ", Types: " + high.getTypesList());
+            }
         }
 
     }

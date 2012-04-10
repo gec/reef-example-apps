@@ -131,8 +131,14 @@ public class EndpointsExample {
         // Get service interface for endpoints
         EndpointService endpointService = client.getService(EndpointService.class);
 
+        // Retrieve list of all endpoint configurations
+        List<Endpoint> endpointConfigList = endpointService.getEndpoints();
+
+        // Inspect a single endpoint configuration
+        Endpoint endpointConfig = endpointConfigList.get(0);
+
         // Select a single endpoint connection
-        EndpointConnection endpoint = endpointService.getEndpointConnectionByEndpointName("SimulatedEndpoint");
+        EndpointConnection endpoint = endpointService.getEndpointConnectionByEndpointName(endpointConfig.getName());
 
         // Display origin state (should be enabled, COMMS_UP)
         System.out.println("Original: " + endpoint.getEndpoint().getName() + ", " + endpoint.getEnabled() + ", " + endpoint.getState());
