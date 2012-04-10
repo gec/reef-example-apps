@@ -111,6 +111,13 @@ public class ProtocolAdapter implements ProtocolManager {
         // Disconnects protocol (stops publishing measurements)
         protocol.disconnect();
 
+        // Inform the system that this endpoint is now offline
+        try {
+            instance.getResources().setCommsState(FEP.EndpointConnection.State.COMMS_DOWN);
+        } catch (ReefServiceException ex) {
+            System.out.println("Couldn't update endpoint connection state. " + ex);
+        }
+
         // Removes protocol from list
         endpointMap.remove(endpointName);
     }
