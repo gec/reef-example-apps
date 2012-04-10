@@ -13,24 +13,11 @@
     </properties>
 
 	<modules>
-        <module>apps/web-war</module>
+        <module>client-api</module>
+		<module>apps/web-war</module>
         <module>apps/web-embedded</module>
 		<module>apps/state-optimizer</module>
         <module>apps/basic-protocol</module>
-		<module>client-api/login</module>
-		<module>client-api/points</module>
-		<module>client-api/measurements</module>
-		<module>client-api/measurement-history</module>
-		<module>client-api/measurement-publishing</module>
-		<module>client-api/commands</module>
-		<module>client-api/events</module>
-		<module>client-api/event-publishing</module>
-		<module>client-api/alarms</module>
-		<module>client-api/entities</module>
-		<module>client-api/endpoints</module>
-		<module>client-api/configfile</module>
-		<module>client-api/applications</module>
-		<module>client-api/subscriptions</module>
         <module>services/basic-proto-service</module>
         <module>services/evented-proto-service</module>
 
