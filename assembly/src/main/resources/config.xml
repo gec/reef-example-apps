@@ -159,9 +159,19 @@
 		</comm:endpoint>
 
         <comm:endpoint name="ExternalEndpoint">
-            <comm:protocol name="ExternalProtocol" />
+            <!-- Inline configuration -->
+            <comm:protocol name="ExternalProtocol">
+                <common:configFile name="MeasurementMapping" mimeType="text/properties"><![CDATA[
+                    meas_name=ExternalDevice.Point01
+                    ]]>
+                </common:configFile>
+            </comm:protocol>
 
-            <!--<comm:interface name="ExternalChannel" />-->
+            <!-- File-based configuration -->
+            <!--
+            <comm:protocol name="ExternalProtocol">
+				<common:configFile fileName="communication/external.properties" mimeType="text/properties"/>
+			</comm:protocol> -->
 
             <comm:equipment name="ExternalDevice">
                 <comm:analog name="Point01" index="0" unit="V"/>

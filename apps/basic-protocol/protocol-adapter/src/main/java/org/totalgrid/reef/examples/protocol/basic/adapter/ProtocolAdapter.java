@@ -62,8 +62,11 @@ public class ProtocolAdapter implements ProtocolManager {
 
         System.out.println("Adding endpoint: " + endpointName);
 
+        // Load the configuration for the protocol from the EndpointConnection's associated ConfigFile object
+        String measurementName = loadMeasurementName(resources);
+
         // Create a protocol implementation
-        ExternalProtocol protocol = new ExternalProtocol();
+        ExternalProtocol protocol = new ExternalProtocol(measurementName);
 
         // Create the adapter that publishes measurements
         UpdateAdapter updateAdapter = new UpdateAdapter(resources);
@@ -110,6 +113,27 @@ public class ProtocolAdapter implements ProtocolManager {
 
         // Removes protocol from list
         endpointMap.remove(endpointName);
+    }
+
+    private String loadMeasurementName(ProtocolResources resources) {
+        String name;
+        try {
+            // Find config file specified in the XML configuration file
+            ConfigFile config = resources.getConfigFile("text/properties");
+
+            // We're looking for content that looks like a=b, b is the measurement name
+            if (config != null) {
+                String raw = config.getFile().toStringUtf8().trim();
+                name = raw.split("=")[1].trim();
+            } else {
+                name = "unknown";
+            }
+
+        } catch (ReefServiceException ex) {
+            name = "unknown";
+            System.out.println("Could not load measurement name: " + ex);
+        }
+        return name;
     }
 
 

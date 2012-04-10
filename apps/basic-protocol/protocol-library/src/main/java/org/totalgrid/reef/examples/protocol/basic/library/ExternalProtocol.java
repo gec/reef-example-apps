@@ -35,13 +35,17 @@ import java.util.TimerTask;
  * Command handling consists of printing to the screen.
  */
 public class ExternalProtocol implements ExternalCommandAcceptor {
-
+    private final String measurementName;
     private Timer timer = null;
+
+    public ExternalProtocol(String measurementName) {
+        this.measurementName = measurementName;
+    }
 
     /**
      * Timer task implementation that generates measurement updates.
      */
-    static class UpdateTask extends TimerTask {
+    class UpdateTask extends TimerTask {
         private final ExternalUpdateAcceptor updateAcceptor;
 
         UpdateTask(ExternalUpdateAcceptor updateAcceptor) {
@@ -52,7 +56,7 @@ public class ExternalProtocol implements ExternalCommandAcceptor {
         public void run() {
             long time = System.currentTimeMillis();
             Random rand = new Random(time);
-            updateAcceptor.handleUpdate("ExternalDevice.Point01", rand.nextDouble(), time);
+            updateAcceptor.handleUpdate(measurementName, rand.nextDouble(), time);
         }
     }
 
