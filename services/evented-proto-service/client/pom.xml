@@ -8,6 +8,7 @@
 
     <properties>
         <maven-protoc-plugin.version>0.1.9-GEC</maven-protoc-plugin.version>
+        <build-helper-maven-plugin.version>1.1</build-helper-maven-plugin.version>
     </properties>
 
     <build>
@@ -35,6 +36,25 @@
                             <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/java</source>
+                            </sources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
