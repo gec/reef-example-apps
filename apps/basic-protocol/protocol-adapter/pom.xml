@@ -4,7 +4,7 @@
     <artifactId>protocol-adapter</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>bundle</packaging>
-    <version>0.4.7</version>
+    <version>0.4.8-SNAPSHOT</version>
 
     <properties>
         <maven-protoc-plugin.version>0.1.9-GEC</maven-protoc-plugin.version>
@@ -45,17 +45,17 @@
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-service-client</artifactId>
-            <version>0.4.7</version>
+            <version>0.4.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-protocol-api</artifactId>
-            <version>0.4.7</version>
+            <version>0.4.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.totalgrid.reef.examples</groupId>
             <artifactId>protocol-library</artifactId>
-            <version>0.4.7</version>
+            <version>0.4.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>org.totalgrid.reef</groupId>
             <artifactId>reef-standalone-fep</artifactId>
-            <version>0.4.7</version>
+            <version>0.4.8-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
