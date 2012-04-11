@@ -4,7 +4,7 @@
     <artifactId>evented-proto-service</artifactId>
     <groupId>org.totalgrid.reef.examples</groupId>
     <packaging>pom</packaging>
-    <version>0.4.7-SNAPSHOT</version>
+    <version>0.4.7</version>
 
     <modules>
         <module>client</module>
