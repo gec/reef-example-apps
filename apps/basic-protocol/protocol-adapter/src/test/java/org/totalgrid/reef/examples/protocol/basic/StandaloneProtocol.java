@@ -29,20 +29,28 @@ import java.util.Properties;
 
 /**
  * Runs just this example protocol against a running server.
+ *
  * @see StandaloneProtocolAdapter
  */
 public class StandaloneProtocol {
     public static void main(String[] args) throws Exception {
 
+        // Load configuration files from the working directory if args aren't present
         if(args.length == 0){
             args = new String[]{"org.totalgrid.reef.amqp.cfg", "org.totalgrid.reef.user.cfg", "org.totalgrid.reef.node.cfg"};
         }
 
+        // Read in configuration
         Properties properties = PropertyReader.readFromFiles(Arrays.asList(args));
+
+        // Create protocol adapter instance
         ProtocolManager manager = new ProtocolAdapter();
 
+        // StandaloneProtocolAdapter allows us to create the "plumbing" necessary to host a protocol without
+        // being deployed directly in the Reef runtime
         StandaloneProtocolAdapter standalone = new StandaloneProtocolAdapter(properties, "ExternalProtocol", manager);
 
+        // Run the protocol until the program is terminated
         standalone.run();
     }
 }
