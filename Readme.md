@@ -18,7 +18,6 @@ Projects
     - **Entities** : Demonstrates entity model queries.
     - **Event Publishing** : Demonstrates the event publishing service client operations.
     - **Events** : Demonstrates querying for events.
-    - **Login** : Basis for all other client API examples, demonstrates creating a connection the server and using credentials to log-in to the services.
     - **Measurement History** : Demonstrates queries for past measurements.
     - **Measurement Publishing** : Demonstrates publishing new measurements to points.
     - **Measurements** : Demonstrates queries for current measurements (measurement snapshots).

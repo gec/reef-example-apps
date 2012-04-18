@@ -49,6 +49,8 @@ public class Examples {
      * Java entry-point for running examples.
      *
      * Starts a client connection to Reef, logs in, and executes example code.
+     * This is a "single shot" connection, if an application plans on running for extended periods it should use a
+     * ConnectedApplicationManagers to be informed of the connection to the server is acquired or lost.
      *
      * @param args Command line arguments
      * @throws Exception
@@ -59,9 +61,10 @@ public class Examples {
             args = new String[]{"org.totalgrid.reef.amqp.cfg", "org.totalgrid.reef.user.cfg", "org.totalgrid.reef.node.cfg"};
         }
 
+        // the properties we need to configure our connection to a reef server may be spread across many files
+        // or combined into a single file. We read them all into a single large properties object and then construct
+        // the settings objects from set of all properties. If there are duplicate keys the last value read in wins.
         Properties properties = PropertyReader.readFromFiles(Arrays.asList(args));
-
-        int result = 0;
 
         // Load broker settings from config file
         AmqpSettings amqp = new AmqpSettings(properties);
@@ -75,6 +78,8 @@ public class Examples {
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
+
+        int result = 0;
 
         try {
 
