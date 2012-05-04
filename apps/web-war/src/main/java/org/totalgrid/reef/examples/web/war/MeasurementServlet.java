@@ -55,7 +55,7 @@ public class MeasurementServlet extends HttpServlet {
 
             // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
             // used to create a Connection to the Reef server
-            this.connectionFactory = new ReefConnectionFactory(amqp, new ReefServices());
+            this.connectionFactory = ReefConnectionFactory.buildFactory(amqp, new ReefServices());
 
             // Connect to the Reef server, may fail if can't connect
             connection = connectionFactory.connect();

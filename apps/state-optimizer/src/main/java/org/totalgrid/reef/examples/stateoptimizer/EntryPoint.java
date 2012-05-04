@@ -40,7 +40,7 @@ public class EntryPoint {
 
 
     public static void startup(AmqpSettings amqp, UserSettings user) {
-        ConnectionFactory factory = new ReefConnectionFactory(amqp, new ReefServices());
+        ConnectionFactory factory = ReefConnectionFactory.buildFactory(amqp, new ReefServices());
         Connection conn = null;
         try {
             conn = factory.connect();
