@@ -99,10 +99,14 @@ public class KeyValueServiceImplementor implements Service {
 
                 // Add to the list of messages returned by the request
                 b.addPayload(msg.toByteString());
-            }
 
-            // Return "OK" response status even if nothing is found
-            b.setStatus(Envelope.Status.OK);
+                // Return "OK" response status even if nothing is found
+                b.setStatus(Envelope.Status.OK);
+            }else{
+                // if key wasn't in map return a failure
+                b.setErrorMessage("Key: " + message.getKey() + " unknown");
+                b.setStatus(Envelope.Status.BAD_REQUEST);
+            }
         }
 
         // Send the response message
