@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentMap;
  * The service is implemented in terms of the RESTful get/put/post/delete verbs, and changes to
  * key value objects are published as service subscription events.
  */
-public class KeyValueService implements Service {
+public class KeyValueServiceImplementor implements Service {
 
     private final ConcurrentMap<String, String> map = new ConcurrentHashMap<String, String>();
 
@@ -46,7 +46,7 @@ public class KeyValueService implements Service {
     /**
      * @param publisher Interface for publishing/binding subscriptions for events.
      */
-    public KeyValueService(EventPublisher publisher) {
+    public KeyValueServiceImplementor(EventPublisher publisher) {
         this.publisher = publisher;
     }
 

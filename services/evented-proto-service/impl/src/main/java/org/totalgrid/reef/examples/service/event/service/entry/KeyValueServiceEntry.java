@@ -30,7 +30,7 @@ import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.examples.service.event.client.KeyValueDescriptor;
 import org.totalgrid.reef.examples.service.event.client.KeyValueServiceList;
-import org.totalgrid.reef.examples.service.event.service.KeyValueService;
+import org.totalgrid.reef.examples.service.event.service.KeyValueServiceImplementor;
 
 public class KeyValueServiceEntry {
     private KeyValueServiceEntry() {}
@@ -76,7 +76,7 @@ public class KeyValueServiceEntry {
             // Bind KeyValue service to handle KeyValue requests.
             // Uses AnyNodeDestination and competing consumers patterns -- meaning all service instances are interchangeable.
             // (This isn't actually true since the "back-end" is in-memory, but we are assuming a single node for this example).
-            registration.bindService(new KeyValueService(eventPublisher), new KeyValueDescriptor(), new AnyNodeDestination(), true);
+            registration.bindService(new KeyValueServiceImplementor(eventPublisher), new KeyValueDescriptor(), new AnyNodeDestination(), true);
 
             System.out.println("Service registered. Press any key to exit...");
 
