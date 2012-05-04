@@ -7,4 +7,5 @@ option java_outer_classname = "Sample";
 
 message SampleMessage {
   optional string content = 1;
+  optional bool   returnError = 2;
 }

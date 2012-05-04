@@ -19,7 +19,6 @@
 package org.totalgrid.reef.examples.service.basic.service.entry;
 
 import org.totalgrid.reef.client.AnyNodeDestination;
-import org.totalgrid.reef.client.Client;
 import org.totalgrid.reef.client.Connection;
 import org.totalgrid.reef.client.ConnectionFactory;
 import org.totalgrid.reef.client.exception.ReefServiceException;
@@ -30,7 +29,7 @@ import org.totalgrid.reef.client.settings.AmqpSettings;
 import org.totalgrid.reef.client.settings.UserSettings;
 import org.totalgrid.reef.examples.service.basic.client.SampleMessageDescriptor;
 import org.totalgrid.reef.examples.service.basic.client.SampleServiceList;
-import org.totalgrid.reef.examples.service.basic.service.SampleService;
+import org.totalgrid.reef.examples.service.basic.service.SampleServiceImplementor;
 
 public class SampleServiceEntry {
     private SampleServiceEntry() {}
@@ -54,7 +53,7 @@ public class SampleServiceEntry {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, new ReefServices());
+        ConnectionFactory connectionFactory = ReefConnectionFactory.buildFactory(amqp, new ReefServices());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
@@ -71,7 +70,7 @@ public class SampleServiceEntry {
             ServiceRegistration registration = connection.getServiceRegistration();
 
             // Bind sample service, routing sample messages to the service implementation
-            registration.bindService(new SampleService(), new SampleMessageDescriptor(), new AnyNodeDestination(), true);
+            registration.bindService(new SampleServiceImplementor(), new SampleMessageDescriptor(), new AnyNodeDestination(), true);
             
             System.out.println("Service registered. Press any key to exit...");
             

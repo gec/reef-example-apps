@@ -18,6 +18,7 @@
  */
 package org.totalgrid.reef.examples.service.basic.client;
 
+import org.totalgrid.reef.client.Promise;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.examples.service.basic.client.proto.Sample.SampleMessage;
 
@@ -28,10 +29,12 @@ public interface SampleService {
 
     /**
      * Send a sample message request and receive a sample message response
-     *
-     * @param request
-     * @return
-     * @throws ReefServiceException
      */
-    SampleMessage sendRequest(SampleMessage request) throws ReefServiceException;
+    Promise<SampleMessage> sendRequest(SampleMessage request) throws ReefServiceException;
+
+    /**
+     * Does same operation as sendRequest but extracts out the "interesting part" of the response. If the causeError
+     * boolean is true the server will return an error message to demonstrate failure handling
+     */
+    Promise<String> sendAndGetContent(String initialString, boolean causeError) throws ReefServiceException;
 }

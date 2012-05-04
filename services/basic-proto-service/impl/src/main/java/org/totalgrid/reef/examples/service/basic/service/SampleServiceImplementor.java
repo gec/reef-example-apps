@@ -29,13 +29,10 @@ import java.util.Map;
 /**
  * Sample service implementation, returns a canned response message just to demonstrate connectivity.
  */
-public class SampleService implements Service {
+public class SampleServiceImplementor implements Service {
 
     @Override
     public void respond(Envelope.ServiceRequest request, Map<String, List<String>> headers, ServiceResponseCallback callback) {
-
-        // Build a canned response message
-        Sample.SampleMessage message = Sample.SampleMessage.newBuilder().setContent("response").build();
 
         // Build the ServiceReponse envelope
         Envelope.ServiceResponse.Builder b = Envelope.ServiceResponse.newBuilder();
@@ -43,13 +40,33 @@ public class SampleService implements Service {
         // Response id must match request id
         b.setId(request.getId());
 
-        // Return an "OK" status
-        b.setStatus(Envelope.Status.OK);
-
-        // Add message payload to response envelope
-        b.addPayload(message.toByteString());
+        prepareResponse(request, b);
 
         // Send the response
         callback.onResponse(b.build());
+    }
+
+    /**
+     * parse the request object out of the envelope and construct the response
+     */
+    private void prepareResponse(Envelope.ServiceRequest request, Envelope.ServiceResponse.Builder b) {
+        try{
+            Sample.SampleMessage messageRequest = Sample.SampleMessage.parseFrom(request.getPayload());
+            // if they have asked for an error, send them the content string as an error
+            if(messageRequest.hasReturnError() && messageRequest.getReturnError()){
+                b.setStatus(Envelope.Status.BAD_REQUEST);
+                b.setErrorMessage(messageRequest.getContent());
+            }else{
+                // if not a
+                Sample.SampleMessage responsePayload = Sample.SampleMessage.newBuilder().setContent(messageRequest.getContent()).build();
+                // Return an "OK" status
+                b.setStatus(Envelope.Status.OK);
+                // Add message payload to response envelope
+                b.addPayload(responsePayload.toByteString());
+            }
+        }catch(Exception e){
+            b.setStatus(Envelope.Status.INTERNAL_ERROR);
+            b.setErrorMessage(e.getMessage());
+        }
     }
 }

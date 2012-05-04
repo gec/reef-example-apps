@@ -19,8 +19,12 @@
 package org.totalgrid.reef.examples.service.basic.client.impl;
 
 import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Promise;
+import org.totalgrid.reef.client.PromiseTransform;
 import org.totalgrid.reef.client.exception.ReefServiceException;
-import org.totalgrid.reef.client.service.ClientOperations;
+import org.totalgrid.reef.client.operations.BasicRequest;
+import org.totalgrid.reef.client.operations.CommonResponseTransformations;
+import org.totalgrid.reef.client.operations.RestOperations;
 import org.totalgrid.reef.examples.service.basic.client.SampleService;
 import org.totalgrid.reef.examples.service.basic.client.proto.Sample;
 
@@ -32,25 +36,45 @@ import org.totalgrid.reef.examples.service.basic.client.proto.Sample;
  *
  */
 public class SampleServiceImpl implements SampleService {
-    
+
     private final Client client;
-    
+
     public SampleServiceImpl(Client client) {
         this.client = client;
     }
 
     /**
-     * Send sample message request, implemented using "GET" verb
-     *
-     * @param request
-     * @return
-     * @throws ReefServiceException
+     * Send sample message request, implemented using "GET" verb. Only a single response is expected
      */
     @Override
-    public Sample.SampleMessage sendRequest(Sample.SampleMessage request) throws ReefServiceException {
+    public Promise<Sample.SampleMessage> sendRequest(final Sample.SampleMessage request) throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<Sample.SampleMessage>() {
+            @Override
+            public Promise<Sample.SampleMessage> execute(RestOperations operations) {
+                return CommonResponseTransformations.one(operations.get(request));
+            }
 
-        return operations.getOne(request);
+            @Override
+            public String errorMessage() {
+                return "Couldn't get sample message";
+            }
+        });
+    }
+
+    /**
+     * Send sample message request and directly extract the content string (showing utility of promise transforms)
+     */
+    @Override
+    public Promise<String> sendAndGetContent(String initialString, boolean causeError) throws ReefServiceException {
+
+        final Sample.SampleMessage request = Sample.SampleMessage.newBuilder().setContent(initialString).build();
+
+        return sendRequest(request).transform(new PromiseTransform<Sample.SampleMessage, String>() {
+            @Override
+            public String transform(Sample.SampleMessage value) throws ReefServiceException {
+                return value.getContent();
+            }
+        });
     }
 }

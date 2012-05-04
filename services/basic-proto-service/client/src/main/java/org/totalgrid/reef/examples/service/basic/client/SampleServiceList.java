@@ -40,6 +40,7 @@ import java.util.List;
  * Provides service clients SampleMessageDescriptors and factories to build implementations
  * of the SampleService interface.
  */
+@SuppressWarnings("unchecked")
 public class SampleServiceList implements ServicesList {
 
     /**

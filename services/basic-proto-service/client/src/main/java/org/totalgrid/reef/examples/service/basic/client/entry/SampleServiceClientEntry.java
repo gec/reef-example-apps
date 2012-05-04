@@ -55,7 +55,7 @@ public class SampleServiceClientEntry {
 
         // Create a ConnectionFactory by passing the broker settings. The ConnectionFactory is
         // used to create a Connection to the Reef server
-        ConnectionFactory connectionFactory = new ReefConnectionFactory(amqp, new ReefServices());
+        ConnectionFactory connectionFactory = ReefConnectionFactory.buildFactory(amqp, new ReefServices());
 
         // Prepare a Connection reference so it can be cleaned up in case of an error
         Connection connection = null;
@@ -75,7 +75,7 @@ public class SampleServiceClientEntry {
             SampleService sampleService = client.getService(SampleService.class);
 
             // Demonstrate making a service request using the service interface
-            Sample.SampleMessage response = sampleService.sendRequest(Sample.SampleMessage.newBuilder().setContent("request").build());
+            Sample.SampleMessage response = sampleService.sendRequest(Sample.SampleMessage.newBuilder().setContent("request").build()).await();
             
             System.out.println(response);
 
