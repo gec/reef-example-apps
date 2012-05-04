@@ -48,6 +48,14 @@ public interface KeyValueService {
     Promise<List<KeyValue>> getAllValues() throws ReefServiceException;
 
     /**
+     * Get a specific list of values
+     *
+     * @return The list of key-value pairs
+     * @throws ReefServiceException
+     */
+    Promise<List<KeyValue>> getValues(List<String> keys) throws ReefServiceException;
+
+    /**
      * Put a key-value pair, adding if one doesn't exist already, modifying otherwise
      *
      * @param key Key of the key-value pair

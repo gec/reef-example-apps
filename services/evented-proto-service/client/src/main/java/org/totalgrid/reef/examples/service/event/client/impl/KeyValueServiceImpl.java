@@ -27,12 +27,11 @@ import org.totalgrid.reef.client.operations.BasicRequest;
 import org.totalgrid.reef.client.operations.CommonResponseTransformations;
 import org.totalgrid.reef.client.operations.RestOperations;
 import org.totalgrid.reef.client.operations.SubscriptionBindingRequest;
-import org.totalgrid.reef.client.service.ClientOperations;
 import org.totalgrid.reef.examples.service.event.client.KeyValueDescriptor;
 import org.totalgrid.reef.examples.service.event.client.KeyValueService;
-import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
 import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,6 +96,35 @@ public class KeyValueServiceImpl implements KeyValueService {
                 KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
                 return CommonResponseTransformations.many(operations.get(request));
+            }
+        });
+    }
+
+    /**
+     * Get a specific set of key-value pairs, implemented as a "scatter gather" query
+     */
+    @Override
+    public Promise<List<KeyValue>> getValues(final List<String> keys) throws ReefServiceException {
+
+        return client.getServiceOperations().request(new BasicRequest<List<KeyValue>>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot get all " + keys.toString();
+            }
+
+            @Override
+            public Promise<List<KeyValue>> execute(RestOperations operations) {
+
+                List<Promise<KeyValue>> individualPromises = new ArrayList<Promise<KeyValue>>(keys.size());
+
+                for(String key : keys){
+                    // Request is a KeyValue with the key filled in as the special "*" character
+                    KeyValue request = KeyValue.newBuilder().setKey(key).build();
+                    Promise<KeyValue> subPromise = CommonResponseTransformations.one(operations.get(request));
+                    individualPromises.add(subPromise);
+                }
+
+                return CommonResponseTransformations.collatePromises(client.getInternal().getExecutor(), individualPromises);
             }
         });
     }
