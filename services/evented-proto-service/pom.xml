@@ -9,6 +9,7 @@
     <modules>
         <module>client</module>
         <module>impl</module>
+		<module>test</module>
     </modules>
 
 </project>
