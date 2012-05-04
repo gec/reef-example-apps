@@ -50,7 +50,7 @@ public class KeyValueClientEntry {
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
         // Make subscription, getting an interface used to start the subscription, along with all immediate results of the query
-        SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToAllKeyValues();
+        SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToAllKeyValues().await();
         
         System.out.println("-- Immediate results of subscription: " + subResult.getResult());
 
@@ -74,12 +74,12 @@ public class KeyValueClientEntry {
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
         // Put a key/value pair that doesn't currently exist
-        KeyValue addResponse = keyValueService.putValue("testKey", "testValue");
+        KeyValue addResponse = keyValueService.putValue("testKey", "testValue").await();
 
         System.out.println("-- Added rest message: " + addResponse);
 
         // Put a key/value pair that exists, modifying the current key/value in the map
-        KeyValue modifyResponse = keyValueService.putValue("testKey", "secondValue");
+        KeyValue modifyResponse = keyValueService.putValue("testKey", "secondValue").await();
 
         System.out.println("-- Modify rest message: " + modifyResponse);
 
@@ -107,16 +107,16 @@ public class KeyValueClientEntry {
         KeyValueService keyValueService = client.getService(KeyValueService.class);
 
         // Subscribe to only "key01" objects, getting an interface used to start the subscription, along with all immediate results of the query
-        SubscriptionResult<List<KeyValue>, KeyValue> subResult = keyValueService.subscribeToKeyValues("key01");
+        SubscriptionResult<KeyValue, KeyValue> subResult = keyValueService.subscribeToKeyValues("key01").await();
 
         // Start the subscription, forwarding events to a simple println implementation of an event acceptor
         subResult.getSubscription().start(new PrintingEventAcceptor());
 
         // Add a KeyValue with the key we're subscribed to
-        KeyValue firstAdd = keyValueService.putValue("key01", "value01");
+        KeyValue firstAdd = keyValueService.putValue("key01", "value01").await();
 
         // Add a KeyValue with the key we're NOT subscribed to
-        KeyValue secondAdd = keyValueService.putValue("key02", "value02");
+        KeyValue secondAdd = keyValueService.putValue("key02", "value02").await();
 
         // Clean up all messages, should receive and event for "key01"
         keyValueService.deleteAllValues();

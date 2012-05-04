@@ -18,6 +18,7 @@
  */
 package org.totalgrid.reef.examples.service.event.client;
 
+import org.totalgrid.reef.client.Promise;
 import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.exception.ReefServiceException;
 import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
@@ -36,7 +37,7 @@ public interface KeyValueService {
      * @return The key-value pair
      * @throws ReefServiceException
      */
-    KeyValue getValue(String key) throws ReefServiceException;
+    Promise<KeyValue> getValue(String key) throws ReefServiceException;
 
     /**
      * Get all key-value pairs
@@ -44,7 +45,7 @@ public interface KeyValueService {
      * @return The list of key-value pairs
      * @throws ReefServiceException
      */
-    List<KeyValue> getAllValues() throws ReefServiceException;
+    Promise<List<KeyValue>> getAllValues() throws ReefServiceException;
 
     /**
      * Put a key-value pair, adding if one doesn't exist already, modifying otherwise
@@ -54,7 +55,7 @@ public interface KeyValueService {
      * @return The key-value pair that was put by the service
      * @throws ReefServiceException
      */
-    KeyValue putValue(String key, String value) throws ReefServiceException;
+    Promise<KeyValue> putValue(String key, String value) throws ReefServiceException;
 
     /**
      * Delete a specific key-value pair by specifying the key
@@ -62,14 +63,14 @@ public interface KeyValueService {
      * @param key Key of the key-value pair
      * @throws ReefServiceException
      */
-    void deleteValue(String key) throws ReefServiceException;
+    Promise<KeyValue> deleteValue(String key) throws ReefServiceException;
 
     /**
      * Delete all entries in the system
      *
      * @throws ReefServiceException
      */
-    void deleteAllValues() throws ReefServiceException;
+    Promise<List<KeyValue>> deleteAllValues() throws ReefServiceException;
 
     /**
      * Subscribe to all subscription events associated with all KeyValue service objects
@@ -77,7 +78,7 @@ public interface KeyValueService {
      * @return Contains immediate results to the query as well as subscription management object
      * @throws ReefServiceException
      */
-    SubscriptionResult<List<KeyValue>, KeyValue> subscribeToAllKeyValues() throws ReefServiceException;
+    Promise<SubscriptionResult<List<KeyValue>, KeyValue>> subscribeToAllKeyValues() throws ReefServiceException;
 
     /**
      * Subscribe to subscription events associated with a specific KeyValue service object (by key)
@@ -86,6 +87,6 @@ public interface KeyValueService {
      * @return Contains immediate results to the query as well as subscription management object
      * @throws ReefServiceException
      */
-    SubscriptionResult<List<KeyValue>, KeyValue> subscribeToKeyValues(String key) throws ReefServiceException;
+    Promise<SubscriptionResult<KeyValue, KeyValue>> subscribeToKeyValues(String key) throws ReefServiceException;
 
 }

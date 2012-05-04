@@ -19,10 +19,18 @@
 package org.totalgrid.reef.examples.service.event.client.impl;
 
 import org.totalgrid.reef.client.Client;
+import org.totalgrid.reef.client.Promise;
+import org.totalgrid.reef.client.SubscriptionBinding;
 import org.totalgrid.reef.client.SubscriptionResult;
 import org.totalgrid.reef.client.exception.ReefServiceException;
+import org.totalgrid.reef.client.operations.BasicRequest;
+import org.totalgrid.reef.client.operations.CommonResponseTransformations;
+import org.totalgrid.reef.client.operations.RestOperations;
+import org.totalgrid.reef.client.operations.SubscriptionBindingRequest;
 import org.totalgrid.reef.client.service.ClientOperations;
+import org.totalgrid.reef.examples.service.event.client.KeyValueDescriptor;
 import org.totalgrid.reef.examples.service.event.client.KeyValueService;
+import org.totalgrid.reef.examples.service.event.client.proto.RestEvented;
 import org.totalgrid.reef.examples.service.event.client.proto.RestEvented.KeyValue;
 
 import java.util.List;
@@ -50,14 +58,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public KeyValue getValue(String key) throws ReefServiceException {
+    public Promise<KeyValue> getValue(final String key) throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<KeyValue>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot get value with key: " + key;
+            }
 
-        // Request is a KeyValue with the key filled in
-        KeyValue request = KeyValue.newBuilder().setKey(key).build();
+            @Override
+            public Promise<KeyValue> execute(RestOperations operations) {
+                // Request is a KeyValue with the key filled in as the special "*" character
+                KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
-        return operations.getOne(request);
+                return CommonResponseTransformations.one(operations.get(request));
+            }
+        });
     }
 
     /**
@@ -67,14 +83,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public List<KeyValue> getAllValues() throws ReefServiceException {
+    public Promise<List<KeyValue>> getAllValues() throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<List<KeyValue>>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot get all values";
+            }
 
-        // Request is a KeyValue with the key filled in as the special "*" character
-        KeyValue request = KeyValue.newBuilder().setKey("*").build();
+            @Override
+            public Promise<List<KeyValue>> execute(RestOperations operations) {
+                // Request is a KeyValue with the key filled in as the special "*" character
+                KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
-        return operations.getMany(request);
+                return CommonResponseTransformations.many(operations.get(request));
+            }
+        });
     }
 
     /**
@@ -86,14 +110,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public KeyValue putValue(String key, String value) throws ReefServiceException {
+    public Promise<KeyValue> putValue(final String key, final String value) throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<KeyValue>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot put key: " + key + " value: " + value;
+            }
 
-        // Request is a KeyValue with both fields filled in
-        KeyValue request = KeyValue.newBuilder().setKey(key).setValue(value).build();
+            @Override
+            public Promise<KeyValue> execute(RestOperations operations) {
+                // Request is a KeyValue with both fields filled in
+                KeyValue request = KeyValue.newBuilder().setKey(key).setValue(value).build();
 
-        return operations.putOne(request);
+                return CommonResponseTransformations.one(operations.put(request));
+            }
+        });
     }
 
     /**
@@ -103,14 +135,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public void deleteValue(String key) throws ReefServiceException {
+    public Promise<KeyValue> deleteValue(final String key) throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<KeyValue>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot get value with key: " + key;
+            }
 
-        // Request is a KeyValue with the key filled in
-        KeyValue request = KeyValue.newBuilder().setKey(key).build();
+            @Override
+            public Promise<KeyValue> execute(RestOperations operations) {
+                // Request is a KeyValue with the key filled in as the special "*" character
+                KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
-        operations.deleteOne(request);
+                return CommonResponseTransformations.one(operations.delete(request));
+            }
+        });
     }
 
     /**
@@ -119,14 +159,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public void deleteAllValues() throws ReefServiceException {
+    public Promise<List<KeyValue>> deleteAllValues() throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().request(new BasicRequest<List<KeyValue>>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot delete all values";
+            }
 
-        // Request is a KeyValue with the key filled in as the special "*" character
-        KeyValue request = KeyValue.newBuilder().setKey("*").build();
+            @Override
+            public Promise<List<KeyValue>> execute(RestOperations operations) {
+                // Request is a KeyValue with the key filled in as the special "*" character
+                KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
-        operations.deleteMany(request);
+                return CommonResponseTransformations.many(operations.delete(request));
+            }
+        });
     }
 
     /**
@@ -136,14 +184,22 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public SubscriptionResult<List<KeyValue>, KeyValue> subscribeToAllKeyValues() throws ReefServiceException {
+    public Promise<SubscriptionResult<List<KeyValue>, KeyValue>> subscribeToAllKeyValues() throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().subscriptionRequest(new KeyValueDescriptor(), new SubscriptionBindingRequest<List<KeyValue>>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot subscribe to all values";
+            }
 
-        // Request is a KeyValue with the key filled in as the special "*" character
-        KeyValue request = KeyValue.newBuilder().setKey("*").build();
+            @Override
+            public Promise<List<KeyValue>> execute(SubscriptionBinding subscription, RestOperations operations) {
+                // Request is a KeyValue with the key filled in as the special "*" character
+                KeyValue request = KeyValue.newBuilder().setKey("*").build();
 
-        return operations.subscribeMany(request);
+                return CommonResponseTransformations.many(operations.get(request, subscription));
+            }
+        });
     }
 
     /**
@@ -154,13 +210,21 @@ public class KeyValueServiceImpl implements KeyValueService {
      * @throws ReefServiceException
      */
     @Override
-    public SubscriptionResult<List<KeyValue>, KeyValue> subscribeToKeyValues(String key) throws ReefServiceException {
+    public Promise<SubscriptionResult<KeyValue, KeyValue>> subscribeToKeyValues(final String key) throws ReefServiceException {
 
-        ClientOperations operations = client.getService(ClientOperations.class);
+        return client.getServiceOperations().subscriptionRequest(new KeyValueDescriptor(), new SubscriptionBindingRequest<KeyValue>() {
+            @Override
+            public String errorMessage() {
+                return "Cannot subscribe to key: " + key;
+            }
 
-        // Request is a KeyValue with the key filled in
-        KeyValue request = KeyValue.newBuilder().setKey(key).build();
+            @Override
+            public Promise<KeyValue> execute(SubscriptionBinding subscription, RestOperations operations) {
+                // Request is a KeyValue with the key filled in
+                KeyValue request = KeyValue.newBuilder().setKey(key).build();
 
-        return operations.subscribeMany(request);
+                return CommonResponseTransformations.one(operations.get(request, subscription));
+            }
+        });
     }
 }

@@ -34,6 +34,7 @@ import java.util.List;
  * Provides service clients KeyValueDescriptors and factories to build implementations
  * of the KeyValueService interface.
  */
+@SuppressWarnings("unchecked")
 public class KeyValueServiceList implements ServicesList {
 
     /**
