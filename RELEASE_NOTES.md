@@ -9,6 +9,19 @@ Version Numbers are of the format {Major}.{Minor}.{Patch}.
 * Minor version updates imply a significant api or datatype change
 * Patch version updates should have little to no api or datatype changes
 
+Version 0.4.8 - June 1, 2012
+==============
+
+### Major Features
+
+* Updated deprecated reef functions.
+* Sample service is now written in terms of Promises
+* Added example showing how to use batchGet
+
+### Dependencies
+
+* Working off of Reef 0.4.8
+
 Version 0.4.7 - February 21, 2012
 ==============
 
