@@ -67,8 +67,20 @@
             <artifactId>reef-service-client</artifactId>
             <version>0.4.8</version>
         </dependency>
-
     </dependencies>
+
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>third-party-release</id>
+            <name>https://repo.totalgrid.org-releases</name>
+            <url>https://repo.totalgrid.org/artifactory/third-party-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <repositories>
         <repository>
             <id>totalgrid-release</id>
